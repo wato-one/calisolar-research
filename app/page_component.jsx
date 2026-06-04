@@ -257,9 +257,10 @@ const sectionHints = {
     { term: "Switching cost", def: "≈ 0 trước khi ký hợp đồng." },
   ],
   competitors: [
-    { term: "TPO / PPA", def: "Sunrun dẫn đầu mô hình không sở hữu hệ thống." },
-    { term: "National / Regional", def: "Quốc gia (scale) vs khu vực (uy tín địa phương)." },
-    { term: "Overpromising", def: "Hứa quá mức ITC/tiết kiệm — rủi uy tín ngành." },
+    { term: "TPO", def: "Third-Party Ownership — công ty thứ ba (vd. Sunrun) sở hữu hệ trên mái; khách trả tiền thuê, thường hưởng ITC thương mại, không solar-owned." },
+    { term: "PPA", def: "Power Purchase Agreement — khách trả theo kWh điện hệ sản xuất do bên thứ ba sở hữu; ít vốn ban đầu, cần đọc escalator trong HĐ." },
+    { term: "National vs Regional", def: "National: scale, financing, brand toàn quốc. Regional: uy tín địa phương, reviews, phạm vi lắp (vd. NRG CA, Stellar SD)." },
+    { term: "Overpromising", def: "Sales hứa quá mức ITC hoặc % tiết kiệm — gây distrust; benchmark đối thủ yếu (rating thấp)." },
   ],
   journey: [
     { term: "Path to Purchase", def: "7 giai đoạn: Trigger → … → Advocate." },
