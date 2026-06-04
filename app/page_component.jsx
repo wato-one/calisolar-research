@@ -441,29 +441,9 @@ export default function App() {
         background: "rgba(245, 248, 255, 0.92)",
         borderBottom: `1px solid ${t.colors.lineSoft}`,
       }}>
-        <div style={{ maxWidth: t.maxWidth, margin: "0 auto", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
-          <a href={t.siteUrl} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: t.colors.ink }}>
+        <div style={{ maxWidth: t.maxWidth, margin: "0 auto", padding: "14px 28px" }}>
+          <a href={t.siteUrl} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", lineHeight: 0 }}>
             <img src={t.logoUrl} alt="CaliSolar" style={{ height: "40px", width: "auto" }} />
-            <span style={{ fontFamily: t.fonts.display, fontWeight: 700, fontSize: "15px" }}>CaliSolar</span>
-          </a>
-          <a
-            href={`${t.siteUrl}contact/`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              padding: "10px 18px",
-              borderRadius: t.radius.sm,
-              background: `linear-gradient(135deg, ${t.colors.accent} 0%, ${t.colors.accentDeep} 100%)`,
-              color: "#fff",
-              fontSize: "13px",
-              fontWeight: 600,
-              textDecoration: "none",
-              boxShadow: "0 10px 24px rgba(16, 47, 125, 0.25)",
-            }}
-          >
-            Get a Quote
           </a>
         </div>
       </header>
