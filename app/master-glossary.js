@@ -1,4 +1,4 @@
-/** Định nghĩa đầy đủ cho bảng thuật ngữ cuối báo cáo */
+/** Định nghĩa đầy đủ cho bảng thuật ngữ cuối báo cáo — sắp xếp A–Z */
 export const masterGlossary = [
   {
     term: "$/W",
@@ -8,12 +8,12 @@ export const masterGlossary = [
   {
     term: "APR",
     en: "Annual Percentage Rate",
-    def: "Lãi suất năm thực tế trên khoản vay solar (bao gồm phí), thường quanh ~5.5% trong báo cáo. APR cao làm tăng thanh toán hàng tháng và kéo dài thời gian hoàn vốn — đối thủ dùng PPA/TPO để tránh vay ngân hàng. Sales cần minh bạch APR vs tiết kiệm hóa đơn để tránh overpromise.",
+    def: "Lãi suất năm thực tế trên khoản vay solar (bao gồm phí). Trong báo cáo dùng benchmark ngành ~5–7% tùy tín dụng (~5.5% minh họa). APR cao làm tăng thanh toán hàng tháng và kéo dài hoàn vốn — đối thủ dùng PPA/TPO (xem Financing, PPA, TPO) để tránh vay. Sales cần minh bạch APR vs tiết kiệm hóa đơn để tránh overpromise.",
   },
   {
     term: "Authorized dealer",
     en: "Đại lý ủy quyền",
-    def: "Đơn vị được hãng panel/inverter hoặc thương hiệu quốc gia chỉ định bán và tư vấn, thường không tự thi công mà giao EPC có license. Mô hình CaliSolar: giảm capex license C-10, tập trung sales + CRM, nhưng phụ thuộc chất lượng EPC và warranty chuyển nhượng.",
+    def: "Đơn vị được hãng panel/inverter hoặc thương hiệu quốc gia chỉ định bán và tư vấn, thường không tự thi công mà giao EPC có license — xem Dealer. Mô hình CaliSolar: giảm capex license C-10, tập trung sales + CRM, nhưng phụ thuộc chất lượng EPC và warranty chuyển nhượng.",
   },
   {
     term: "Bill Shock",
@@ -23,7 +23,7 @@ export const masterGlossary = [
   {
     term: "Bundling",
     en: "Gói sản phẩm",
-    def: "Bán solar kèm pin lưu trữ, EV charger, hoặc hiệu quả năng lượng trong một proposal. Sau NEM 3.0, bundling battery là cách tối đa giá trị vì export điện dư rẻ; 73% quan tâm pin nhưng chỉ ~40% mua — cơ hội educate và financing gói.",
+    def: "Bán solar kèm pin lưu trữ, EV charger, hoặc hiệu quả năng lượng trong một proposal. Sau NEM 3.0 / NBT, bundling battery là cách tối đa giá trị vì export điện dư rẻ. Khảo sát ngành trong báo cáo (ước tính): ~73% quan tâm pin, ~40% chốt mua — cơ hội educate và financing gói.",
   },
   {
     term: "C-10 / C-46",
@@ -63,17 +63,17 @@ export const masterGlossary = [
   {
     term: "Dealer",
     en: "Đại lý / nhà phân phối",
-    def: "Tổ chức tập trung bán hàng, marketing, financing — thường outsource lắp đặt cho EPC. Rào cản gia nhập thấp hơn installer tích hợp; rủi ro là chất lượng thi công phụ thuộc đối tác và reputation dính vào một EPC yếu.",
-  },
-  {
-    term: "EPC",
-    en: "Engineering, Procurement, Construction",
-    def: "Đối tác thiết kế hệ thống, mua panel/inverter, xin permit, thi công và bàn giao PTO. Quyền lực nhà cung cấp cao nếu dealer chỉ có một EPC; đa EPC theo vùng giúp giảm bottleneck và cải thiện timeline install.",
+    def: "Tổ chức tập trung bán hàng, marketing, financing — thường outsource lắp đặt cho EPC; có thể là Authorized dealer của hãng. Rào cản gia nhập thấp hơn installer tích hợp; rủi ro là chất lượng thi công phụ thuộc đối tác và reputation dính vào một EPC yếu.",
   },
   {
     term: "EnergySage",
     en: "Solar marketplace",
     def: "Nền tảng so sánh báo giá online — engagement tăng mạnh, làm minh bạch giá và tăng quyền lực khách (Porter: buyer power cao). CaliSolar cần profile đầy đủ, phản hồi nhanh quote request, và proposal cạnh tranh vì switching cost ≈ 0 trước ký HĐ.",
+  },
+  {
+    term: "EPC",
+    en: "Engineering, Procurement, Construction",
+    def: "Đối tác thiết kế hệ thống, mua panel/inverter, xin permit, thi công và bàn giao PTO. Quyền lực nhà cung cấp cao nếu dealer chỉ có một EPC; đa EPC theo vùng giúp giảm bottleneck và cải thiện timeline install.",
   },
   {
     term: "EV",
@@ -83,7 +83,7 @@ export const masterGlossary = [
   {
     term: "Financing",
     en: "Tài trợ",
-    def: "Các hình thức trả cho hệ solar: cash, loan (solar-owned), lease, PPA, TPO. Chi phí vốn (APR) và ITC eligibility quyết định sản phẩm bán được. Post-ITC residential, TPO/PPA thương mại + safe harbor (SEIA: hỗ trợ qualify ITC TPO đến ~giữa 2030) vẫn là vũ khí đối thủ national.",
+    def: "Các hình thức trả cho hệ solar: cash, loan/solar-owned (Loan / Cash), lease (Lease / TPO), PPA, TPO. Chi phí vốn (APR) và ITC eligibility quyết định sản phẩm bán được. Post-ITC residential (OBBBA / Section 25D hết), TPO/PPA thương mại + Safe harbor (benchmark SEIA trong báo cáo: hỗ trợ qualify ITC TPO đến ~giữa 2030) vẫn là vũ khí đối thủ national.",
   },
   {
     term: "Fixed Charge",
@@ -111,9 +111,19 @@ export const masterGlossary = [
     def: "Công ty thi công trực tiếp, giữ license C-10/C-46, chịu trách nhiệm permit và workmanship. So với dealer: margin thấp hơn trên $/W nhưng kiểm soát chất lượng tốt hơn; national installer thường scale financing + brand.",
   },
   {
+    term: "IOU",
+    en: "Investor-Owned Utility",
+    def: "Utility sở hữu cổ đông tại CA — PG&E, SCE, SDG&E phục vụ phần lớn khách residential. Khác municipal/co-op; CPUC điều tiết biểu giá, NBT, Fixed Charge. Xem PG&E / SCE / SDG&E.",
+  },
+  {
     term: "ITC",
     en: "Investment Tax Credit",
-    def: "Tín dụng thuế liên bang khấu trừ % chi phí hệ solar. Residential Section 25D 30% đã hết 31/12/2025 — SEIA dự báo residential sụt ~19% năm 2026. Commercial ITC vẫn hỗ trợ TPO/PPA; messaging sales phải chuyển sang payback và giá utility.",
+    def: "Tín dụng thuế liên bang khấu trừ % chi phí hệ solar. Residential Section 25D 30% đã hết 31/12/2025 (OBBBA xác nhận) — SEIA dự báo residential sụt ~19% năm 2026. Commercial ITC (Section 48) vẫn hỗ trợ TPO/PPA qua Safe harbor; messaging sales chuyển sang payback và giá utility.",
+  },
+  {
+    term: "kW",
+    en: "Kilowatt",
+    def: "1.000 watt — đơn vị công suất (size) hệ PV; residential CA thường 4–12 kW. Khác kWh (năng lượng theo thời gian): $/W × kW ≈ chi phí hệ; thiết kế cần profile kWh theo TOU, không chỉ tổng kW.",
   },
   {
     term: "kWh",
@@ -123,7 +133,7 @@ export const masterGlossary = [
   {
     term: "Lease / TPO",
     en: "Thuê / Third-Party Ownership",
-    def: "Công ty thứ ba (thường Sunrun) sở hữu hệ trên mái khách; khách trả tiền thuê hoặc PPA rate. Khách không nhận residential ITC nhưng có thể có payment thấp hơn vay; khi bán nhà cần hiểu điều khoản chuyển nhượng lease.",
+    def: "Lease: trả tiền thuê hệ do bên thứ ba sở hữu. Gắn với TPO (Third-Party Ownership) — xem TPO, PPA, Financing. Khách không nhận residential ITC (25D) nhưng có thể có payment thấp hơn vay; khi bán nhà cần điều khoản chuyển nhượng lease.",
   },
   {
     term: "Loan / Cash",
@@ -141,6 +151,11 @@ export const masterGlossary = [
     def: "Chứng chỉ lắp đặt solar uy tín Bắc Mỹ — signal chất lượng trong giai đoạn Evaluation. Đối thủ regional (NRG Clean Power) nhấn certification; dealer có thể liệt kê NABCEP của foreman/EPC partner.",
   },
   {
+    term: "NBT",
+    en: "Net Billing Tariff",
+    def: "Tên chính thức CPUC cho regime thay NEM 2.0 (4/2023) — sales hay gọi NEM 3.0. Export được trả theo avoided-cost theo giờ, không offset 1:1 — xem NEM 3.0, CPUC, Fixed Charge.",
+  },
+  {
     term: "NEM 2.0",
     en: "Net Energy Metering 2.0",
     def: "Chính sách cũ: điện dư từ solar offset hóa đơn gần tỷ lệ 1:1 theo kWh (trong hạn mức). Đã thay bởi NEM 3.0 từ 4/2023 — khách cũ trên NEM 2.0 có switching cost cao hơn khi nói về giá trị pin cho prospect mới.",
@@ -148,7 +163,7 @@ export const masterGlossary = [
   {
     term: "NEM 3.0",
     en: "Net Billing Tariff",
-    def: "Chính sách hiện hành CA: export solar về lưới được trả ~$0.04–0.10/kWh theo giờ, thấp hơn nhiều so với giá mua điện. Buộc thiết kế self-consumption + battery; sales pitch “bán điện cho lưới” không còn đúng như NEM 2.0.",
+    def: "Chính sách hiện hành CA (CPUC Net Billing Tariff — xem NBT): export solar về lưới được trả ~$0.04–0.10/kWh theo giờ, thấp hơn nhiều so với giá mua điện. Buộc self-consumption + battery; pitch “bán điện cho lưới” không còn đúng như NEM 2.0.",
   },
   {
     term: "NPV",
@@ -161,9 +176,14 @@ export const masterGlossary = [
     def: "Vận hành và bảo trì sau PTO: monitor inverter, vệ sinh panel, thay thiết bị hỏng. Solar-owned thường ít O&M cost; lease/TPO có thể gói O&M trong hợp đồng. Warranty workmanship ~10 năm khác với O&M dài hạn.",
   },
   {
+    term: "OBBBA",
+    en: "One Big Beautiful Bill Act",
+    def: "Đạo luật liên bang 2025 xác nhận hết Section 25D residential ITC sau 2025; TPO/commercial ITC (Section 48) vẫn có thể qualify với Safe harbor và ràng buộc FEOC. Tạo headwind residential, uncertainty ngắn hạn — xem Post-ITC, ITC, SEIA.",
+  },
+  {
     term: "Organic leads",
     en: "Lead tự nhiên",
-    def: "Khách đến từ SEO, Google Business, SolarReviews, referral — không trả cost-per-lead ads. Công ty 50+ reviews có thể nhận ~3x organic leads; review dưới 30 ngày signal “đang hoạt động”.",
+    def: "Khách đến từ SEO, Google Business, SolarReviews, referral — không trả cost-per-lead ads. Benchmark ngành trong báo cáo (ước tính): installer 50+ reviews có thể nhận ~3× organic leads; review mới trong 30 ngày signal “đang hoạt động”.",
   },
   {
     term: "Overpromise",
@@ -188,7 +208,7 @@ export const masterGlossary = [
   {
     term: "PG&E / SCE / SDG&E",
     en: "Investor-owned utilities CA",
-    def: "Ba IOU phục vụ phần lớn CA: Pacific Gas & Electric, Southern California Edison, San Diego Gas & Electric. Biểu giá, TOU, PSPS, và Net Billing khác nhẹ theo vùng — proposal phải dùng tariff đúng utility.",
+    def: "Ba IOU (Investor-Owned Utility) phục vụ phần lớn CA: Pacific Gas & Electric, Southern California Edison, San Diego Gas & Electric. Biểu giá, TOU, PSPS, và Net Billing (NBT) khác nhẹ theo vùng — proposal phải dùng tariff đúng utility.",
   },
   {
     term: "Porter's Five Forces",
@@ -203,7 +223,7 @@ export const masterGlossary = [
   {
     term: "PPA",
     en: "Power Purchase Agreement",
-    def: "Khách trả theo kWh điện sản xuất từ hệ do bên thứ ba sở hữu — giống “mua điện rẻ hơn utility” nhưng không sở hữu asset. So sánh với loan: PPA ít capex upfront, ít tăng giá nhà, cần đọc escalator rate trong HĐ.",
+    def: "Power Purchase Agreement — khách trả theo kWh điện từ hệ do bên thứ ba sở hữu (TPO). Giống “mua điện rẻ hơn utility” nhưng không sở hữu asset; so với Loan / Cash: ít capex upfront, ít tăng giá nhà. Xem Financing, Lease / TPO, TPO; đọc escalator rate trong HĐ.",
   },
   {
     term: "PSPS",
@@ -226,14 +246,24 @@ export const masterGlossary = [
     def: "Lợi tức hoặc số năm hoàn vốn = chi phí hệ / tiết kiệm điện hàng năm (đơn giản). Post-ITC và NEM 3.0, ROI phải tính battery và Fixed Charge — tránh ROI “ảo” chỉ dựa trên NEM 2.0.",
   },
   {
+    term: "Safe harbor",
+    en: "ITC safe harbor",
+    def: "Cơ chế IRS cho dự án bắt đầu construction / đặt mua thiết bị trong khung thời gian để lock ITC thương mại — TPO/lease residential-scale dùng Section 48. SEIA trong báo cáo: hoạt động safe harbor hỗ trợ qualify TPO đến ~giữa 2030 (benchmark, không phải cam kết pháp lý). Xem TPO, Financing.",
+  },
+  {
     term: "Section 25D",
     en: "Residential ITC (IRC)",
-    def: "Điều khoản Internal Revenue Code cho tín dụng thuế residential solar 30% — đã sunset 31/12/2025. Sales không được gọi “30% ITC” cho HĐ ký sau ngày này trừ khi có tư vấn thuế rõ ràng về điều kiện khác.",
+    def: "Điều khoản IRC cho ITC residential solar 30% — sunset 31/12/2025; OBBBA loại bỏ credit sở hữu residential sau 2025. Sales không gọi “30% ITC” cho HĐ ký sau ngày này trừ tư vấn thuế rõ; xem Post-ITC, ITC.",
   },
   {
     term: "SEIA",
     en: "Solar Energy Industries Association",
-    def: "Hiệp hội solar Hoa Kỳ — xuất báo cáo thị trường, forecast -19% residential 2026, lobby CPUC/ITC. Nguồn macro credible cho slide PESTEL và lifecycle.",
+    def: "Hiệp hội solar Hoa Kỳ — báo cáo thị trường, forecast −19% residential 2026, lobby CPUC/ITC. Nguồn macro credible cho slide PESTEL, Chiến Lược và triển vọng thị trường (không còn mục lifecycle riêng).",
+  },
+  {
+    term: "SEO",
+    en: "Search Engine Optimization",
+    def: "Tối ưu website và Google Business để rank “solar installer + city”. Chi phí thấp hơn paid lead dài hạn; kết hợp review velocity (SolarReviews, Yelp) — khảo sát ngành trong báo cáo (ước tính): ~88% tin review ngang referral.",
   },
   {
     term: "SGIP",
@@ -241,19 +271,14 @@ export const masterGlossary = [
     def: "Chương trình rebate pin lưu trữ của CA (admin qua CPUC/utility), giảm capex battery. Quan trọng trong bundling proposal sau NEM 3.0 — eligibility và step-down rebate cần check theo utility và budget đợt.",
   },
   {
-    term: "SEO",
-    en: "Search Engine Optimization",
-    def: "Tối ưu website và Google Business để rank “solar installer + city”. Chi phí thấp hơn paid lead dài hạn; kết hợp review velocity (SolarReviews, Yelp) vì 88% tin review ngang referral.",
-  },
-  {
     term: "Social proof",
     en: "Bằng chứng xã hội",
-    def: "Reviews, số install, chứng chỉ, case study — giảm perceived risk ở Evaluation. 50+ reviews → ~3x organic leads; rating 4.9★ (NRG) vs 3.1★ (LA Solar) minh họa ảnh hưởng đến conversion.",
+    def: "Reviews, số install, chứng chỉ, case study — giảm perceived risk ở Evaluation. Benchmark trong báo cáo (ước tính): 50+ reviews → ~3× organic leads; rating 4.9★ (NRG) vs 3.1★ (LA Solar) minh họa conversion.",
   },
   {
     term: "Solar Mandate",
     en: "California solar mandate",
-    def: "Từ 2020, nhà mới xây tại CA phải có solar PV (Title 24). Mở rộng pipeline nhưng khách mandat e nhạy giá hơn — upsell battery theo code 2025 hiệu lực 1/2026.",
+    def: "Từ 2020, nhà mới xây tại CA phải có solar PV (Title 24). Mở rộng pipeline nhưng khách mandate nhạy giá hơn — upsell battery theo code 2025 hiệu lực 1/2026.",
   },
   {
     term: "Solar-owned",
@@ -276,19 +301,19 @@ export const masterGlossary = [
     def: "Yếu tố đẩy demand: TOU peak cao, PSPS, Solar Mandate, battery + VPP, climate 2045. CaliSolar align messaging với tailwinds khi headwinds (ITC, NEM) làm ROI khó hơn.",
   },
   {
-    term: "TOU",
-    en: "Time-of-Use",
-    def: "Biểu giá điện theo giờ — peak thường 4–9 PM khi solar không sản xuất. Pin shift load ra off-peak và giảm export rẻ; giải thích TOU giúp justify battery hơn chỉ nói “free electricity”.",
-  },
-  {
     term: "TOPCon / HJT",
     en: "Tunnel oxide / Heterojunction",
     def: "Công nghệ cell thế hệ mới, hiệu suất module 450W+ phổ biến — ít panel hơn trên mái nhỏ. Premium brand (SunPower/Maxeon) vs value installer; dealer cần spec sheet rõ khi compete trên $/W.",
   },
   {
+    term: "TOU",
+    en: "Time-of-Use",
+    def: "Biểu giá điện theo giờ — peak thường 4–9 PM khi solar không sản xuất. Pin shift load ra off-peak và giảm export rẻ; giải thích TOU giúp justify battery hơn chỉ nói “free electricity”.",
+  },
+  {
     term: "TPO",
     en: "Third-Party Ownership",
-    def: "Mô hình công ty thứ ba sở hữu hệ và hưởng commercial ITC + safe harbor (SEIA: timeline qualify đến ~giữa 2030), khách trả lease/PPA. National players mạnh TPO; local dealer cần partnership financing hoặc nhấn solar-owned + SGIP.",
+    def: "Third-Party Ownership — công ty thứ ba sở hữu hệ, hưởng commercial ITC + Safe harbor (benchmark SEIA trong báo cáo: qualify đến ~giữa 2030). Khách trả lease hoặc PPA — xem Lease / TPO, PPA, Financing. National players mạnh TPO; dealer local cần partnership financing hoặc nhấn solar-owned + SGIP.",
   },
   {
     term: "Transferable warranty",
@@ -303,12 +328,12 @@ export const masterGlossary = [
   {
     term: "Wholesale",
     en: "Giá điện bán buôn",
-    def: "Giá utility mua/generate điện ở cấp bulk — AI data centers và nhu cầu load làm wholesale tăng (~23% trong báo cáo), kéo retail rate. Giải thích cho homeowner vì sao hóa đơn SCE tăng dù họ “ít dùng điện hơn”.",
+    def: "Giá utility mua/generate điện ở cấp bulk — AI data centers và load growth kéo wholesale lên (trong báo cáo: ~+23% ước tính macro), đẩy retail rate. Giải thích homeowner vì sao hóa đơn SCE tăng dù tiêu thụ không đổi.",
   },
   {
     term: "WOM",
     en: "Word of Mouth",
-    def: "Giới thiệu từ hàng xóm, gia đình, contractor — giai đoạn Advocate trong Journey. 88% tin online review ngang WOM; kết hợp referral incentive sau PTO để nhân hóa organic.",
+    def: "Giới thiệu từ hàng xóm, gia đình, contractor — giai đoạn Advocate trong Path to Purchase. Khảo sát ngành trong báo cáo (ước tính): ~88% tin online review ngang WOM; referral incentive sau PTO nhân hóa organic.",
   },
   {
     term: "Workmanship warranty",
@@ -316,13 +341,13 @@ export const masterGlossary = [
     def: "Bảo hành lỗi lắp đặt (roof leak, wiring) thường ~10 năm — do installer/EPC, khác product warranty 25 năm panel. Dealer phải đảm bảo EPC đứng sau workmanship để không reputational risk.",
   },
   {
-    term: "YoY",
-    en: "Year over Year",
-    def: "So sánh cùng kỳ năm trước — ví dụ residential Mỹ −2% MW 2025 vs 2024 (SEIA). Dùng trong macro narrative; không nhầm với seasonal bill shock mùa hè SCE.",
-  },
-  {
     term: "Yelp / BBB",
     en: "Review & accreditation",
     def: "Yelp: review local service; BBB: accreditation và complaint history. Bổ sung SolarReviews/Google — khách CA thường check cả ba; phản hồi BBB complaint nhanh giảm risk cho regional dealer.",
+  },
+  {
+    term: "YoY",
+    en: "Year over Year",
+    def: "So sánh cùng kỳ năm trước — ví dụ residential Mỹ −2% MW 2025 vs 2024 (SEIA). Dùng trong macro narrative; không nhầm với seasonal bill shock mùa hè SCE.",
   },
 ];
