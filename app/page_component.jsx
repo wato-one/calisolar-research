@@ -7,8 +7,8 @@ const sections = [
   { id: "pestel", label: "PESTEL" },
   { id: "porter", label: "Porter's 5 Forces" },
   { id: "competitors", label: "Đối Thủ" },
-  { id: "journey", label: "Path to Purchase" },
   { id: "consumer", label: "Consumer Deep Dive" },
+  { id: "journey", label: "Path to Purchase" },
   { id: "strategy", label: "Chiến Lược" },
   { id: "glossary", label: "Thuật Ngữ" },
 ];
@@ -435,91 +435,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* ===== PATH TO PURCHASE INFOGRAPHIC ===== */}
-        <section id="journey" style={sectionWrap}>
-          <h2 style={h2}>Path to Purchase</h2>
-          <SectionTermHint terms={sectionHints.journey} />
-          <p style={{ ...body, marginBottom: "8px" }}>Hành trình 7 giai đoạn từ kích hoạt nhu cầu đến trở thành người giới thiệu. Tổng timeline: 2-8 tuần (Trigger → Decision) + 3-12 tuần (Install → PTO).</p>
-          <p style={{ fontSize: "12px", color: "rgba(245,240,232,0.35)", marginBottom: "32px" }}>Cuộn xuống để xem chi tiết từng giai đoạn — hoặc dùng menu phía trên để nhảy nhanh.</p>
-
-          {/* VISUAL JOURNEY LINE */}
-          <div style={{ position: "relative", marginBottom: "40px" }}>
-            <div style={{ position: "absolute", top: "24px", left: "24px", right: "24px", height: "2px", background: "linear-gradient(90deg, #C62828, #1565C0, #6A1B9A, #2E7D32, #F4A623, #00695C, #E65100)", opacity: 0.3 }} />
-            <div style={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
-              {journeyStages.map((s, i) => (
-                <div key={i} style={{ textAlign: "center", flex: 1, padding: "0 2px" }}>
-                  <div style={{
-                    width: "48px", height: "48px", borderRadius: "50%", margin: "0 auto 8px",
-                    background: `${s.color}22`,
-                    border: `2px solid ${s.color}`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "20px",
-                  }}>{s.icon}</div>
-                  <div style={{ fontSize: "10px", fontWeight: 800, color: s.color, letterSpacing: "0.5px" }}>{s.num}</div>
-                  <div style={{ fontSize: "11px", fontWeight: 600, color: "#F5F0E8", marginTop: "2px" }}>{s.title}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {journeyStages.map((stage, si) => (
-            <div key={si} style={{ ...card, borderLeft: `3px solid ${stage.color}`, background: stage.bgColor }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px", flexWrap: "wrap" }}>
-                <div style={{ fontSize: "32px" }}>{stage.icon}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ fontSize: "12px", fontWeight: 800, color: stage.color, letterSpacing: "1px" }}>{stage.num}</span>
-                    <h3 style={{ fontSize: "20px", fontWeight: 800, margin: 0, color: "#F5F0E8" }}>{stage.title}</h3>
-                  </div>
-                  <div style={{ fontSize: "13px", color: "rgba(245,240,232,0.5)", marginTop: "2px" }}>{stage.subtitle}</div>
-                </div>
-                <div style={{ padding: "6px 14px", borderRadius: "20px", background: "rgba(255,255,255,0.06)", fontSize: "12px", fontWeight: 600, color: "rgba(245,240,232,0.5)" }}>⏱ {stage.duration}</div>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "10px", marginBottom: "16px" }}>
-                {stage.triggers.map((t, ti) => (
-                  <div key={ti} style={{ padding: "14px", borderRadius: "6px", background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.04)" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#F5F0E8" }}>{t.label}</span>
-                      {t.pct && <span style={{ fontSize: "12px", fontWeight: 800, color: stage.color }}>{t.pct}</span>}
-                    </div>
-                    <div style={{ fontSize: "12px", color: "rgba(245,240,232,0.5)", lineHeight: 1.5 }}>{t.desc}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ padding: "12px 16px", borderRadius: "6px", background: `${stage.color}15`, border: `1px solid ${stage.color}30` }}>
-                <div style={{ fontSize: "11px", fontWeight: 700, color: stage.color, letterSpacing: "0.5px", marginBottom: "4px" }}>CALIFORNIA INSIGHT</div>
-                <div style={{ fontSize: "13px", color: "rgba(245,240,232,0.65)", lineHeight: 1.6 }}>{stage.caliBehavior}</div>
-              </div>
-            </div>
-          ))}
-
-          {/* TIMELINE SUMMARY */}
-          <div style={{ ...card, marginTop: "24px" }}>
-            <h3 style={{ ...h3, fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", color: "rgba(245,240,232,0.5)" }}>Timeline tổng hợp</h3>
-            <div style={{ display: "flex", gap: "4px", alignItems: "stretch", marginTop: "12px" }}>
-              {[
-                { label: "Trigger→Research", w: "15%", color: "#C62828", time: "0-2 tuần" },
-                { label: "Compare", w: "20%", color: "#6A1B9A", time: "1-3 tuần" },
-                { label: "Evaluate→Decide", w: "15%", color: "#2E7D32", time: "1-2 tuần" },
-                { label: "Install→PTO", w: "35%", color: "#00695C", time: "3-12 tuần" },
-                { label: "Advocate", w: "15%", color: "#E65100", time: "Ongoing" },
-              ].map((b, i) => (
-                <div key={i} style={{ flex: b.w, padding: "12px 8px", borderRadius: "4px", background: `${b.color}20`, borderTop: `3px solid ${b.color}`, textAlign: "center" }}>
-                  <div style={{ fontSize: "10px", fontWeight: 700, color: b.color, letterSpacing: "0.3px" }}>{b.label}</div>
-                  <div style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginTop: "4px" }}>{b.time}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: "12px", display: "flex", gap: "16px", justifyContent: "center", fontSize: "11px", color: "rgba(245,240,232,0.35)" }}>
-              <span>🏷 Referral leads: 1-3 tuần total</span>
-              <span>🏷 Marketplace leads: 4-8 tuần total</span>
-              <span>🏷 Cold leads: 6-12 tuần total</span>
-            </div>
-          </div>
-        </section>
-
         {/* ===== CONSUMER DEEP DIVE ===== */}
         <section id="consumer" style={sectionWrap}>
           <h2 style={h2}>Consumer Deep Dive</h2>
@@ -631,6 +546,91 @@ export default function App() {
                 <div>• <strong>Post-install support:</strong> 24/7 monitoring, responsive (CaliSolar có!)</div>
                 <div>• <strong>Validation:</strong> xác nhận hệ thống hoạt động đúng</div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== PATH TO PURCHASE INFOGRAPHIC ===== */}
+        <section id="journey" style={sectionWrap}>
+          <h2 style={h2}>Path to Purchase</h2>
+          <SectionTermHint terms={sectionHints.journey} />
+          <p style={{ ...body, marginBottom: "8px" }}>Hành trình 7 giai đoạn từ kích hoạt nhu cầu đến trở thành người giới thiệu. Tổng timeline: 2-8 tuần (Trigger → Decision) + 3-12 tuần (Install → PTO).</p>
+          <p style={{ fontSize: "12px", color: "rgba(245,240,232,0.35)", marginBottom: "32px" }}>Cuộn xuống để xem chi tiết từng giai đoạn — hoặc dùng menu phía trên để nhảy nhanh.</p>
+
+          {/* VISUAL JOURNEY LINE */}
+          <div style={{ position: "relative", marginBottom: "40px" }}>
+            <div style={{ position: "absolute", top: "24px", left: "24px", right: "24px", height: "2px", background: "linear-gradient(90deg, #C62828, #1565C0, #6A1B9A, #2E7D32, #F4A623, #00695C, #E65100)", opacity: 0.3 }} />
+            <div style={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
+              {journeyStages.map((s, i) => (
+                <div key={i} style={{ textAlign: "center", flex: 1, padding: "0 2px" }}>
+                  <div style={{
+                    width: "48px", height: "48px", borderRadius: "50%", margin: "0 auto 8px",
+                    background: `${s.color}22`,
+                    border: `2px solid ${s.color}`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "20px",
+                  }}>{s.icon}</div>
+                  <div style={{ fontSize: "10px", fontWeight: 800, color: s.color, letterSpacing: "0.5px" }}>{s.num}</div>
+                  <div style={{ fontSize: "11px", fontWeight: 600, color: "#F5F0E8", marginTop: "2px" }}>{s.title}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {journeyStages.map((stage, si) => (
+            <div key={si} style={{ ...card, borderLeft: `3px solid ${stage.color}`, background: stage.bgColor }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px", flexWrap: "wrap" }}>
+                <div style={{ fontSize: "32px" }}>{stage.icon}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 800, color: stage.color, letterSpacing: "1px" }}>{stage.num}</span>
+                    <h3 style={{ fontSize: "20px", fontWeight: 800, margin: 0, color: "#F5F0E8" }}>{stage.title}</h3>
+                  </div>
+                  <div style={{ fontSize: "13px", color: "rgba(245,240,232,0.5)", marginTop: "2px" }}>{stage.subtitle}</div>
+                </div>
+                <div style={{ padding: "6px 14px", borderRadius: "20px", background: "rgba(255,255,255,0.06)", fontSize: "12px", fontWeight: 600, color: "rgba(245,240,232,0.5)" }}>⏱ {stage.duration}</div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "10px", marginBottom: "16px" }}>
+                {stage.triggers.map((t, ti) => (
+                  <div key={ti} style={{ padding: "14px", borderRadius: "6px", background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.04)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#F5F0E8" }}>{t.label}</span>
+                      {t.pct && <span style={{ fontSize: "12px", fontWeight: 800, color: stage.color }}>{t.pct}</span>}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "rgba(245,240,232,0.5)", lineHeight: 1.5 }}>{t.desc}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ padding: "12px 16px", borderRadius: "6px", background: `${stage.color}15`, border: `1px solid ${stage.color}30` }}>
+                <div style={{ fontSize: "11px", fontWeight: 700, color: stage.color, letterSpacing: "0.5px", marginBottom: "4px" }}>CALIFORNIA INSIGHT</div>
+                <div style={{ fontSize: "13px", color: "rgba(245,240,232,0.65)", lineHeight: 1.6 }}>{stage.caliBehavior}</div>
+              </div>
+            </div>
+          ))}
+
+          {/* TIMELINE SUMMARY */}
+          <div style={{ ...card, marginTop: "24px" }}>
+            <h3 style={{ ...h3, fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", color: "rgba(245,240,232,0.5)" }}>Timeline tổng hợp</h3>
+            <div style={{ display: "flex", gap: "4px", alignItems: "stretch", marginTop: "12px" }}>
+              {[
+                { label: "Trigger→Research", w: "15%", color: "#C62828", time: "0-2 tuần" },
+                { label: "Compare", w: "20%", color: "#6A1B9A", time: "1-3 tuần" },
+                { label: "Evaluate→Decide", w: "15%", color: "#2E7D32", time: "1-2 tuần" },
+                { label: "Install→PTO", w: "35%", color: "#00695C", time: "3-12 tuần" },
+                { label: "Advocate", w: "15%", color: "#E65100", time: "Ongoing" },
+              ].map((b, i) => (
+                <div key={i} style={{ flex: b.w, padding: "12px 8px", borderRadius: "4px", background: `${b.color}20`, borderTop: `3px solid ${b.color}`, textAlign: "center" }}>
+                  <div style={{ fontSize: "10px", fontWeight: 700, color: b.color, letterSpacing: "0.3px" }}>{b.label}</div>
+                  <div style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginTop: "4px" }}>{b.time}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: "12px", display: "flex", gap: "16px", justifyContent: "center", fontSize: "11px", color: "rgba(245,240,232,0.35)" }}>
+              <span>🏷 Referral leads: 1-3 tuần total</span>
+              <span>🏷 Marketplace leads: 4-8 tuần total</span>
+              <span>🏷 Cold leads: 6-12 tuần total</span>
             </div>
           </div>
         </section>
