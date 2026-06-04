@@ -1,13 +1,13 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "CaliSolar - Phân Tích Ngành Solar Residential California 2026",
-  description: "PESTEL, Porter's Five Forces, Competitive Analysis, Consumer Behavior",
+  title: "CaliSolar — California Residential Solar Industry Analysis 2026",
+  description: "PESTEL, Porter's Five Forces, competitive analysis, consumer behavior, and path to purchase",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="vi">
+    <html lang="en">
       <body>{children}</body>
     </html>
   );
