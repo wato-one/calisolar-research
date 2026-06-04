@@ -1,0 +1,13 @@
+# dependencies & build
+node_modules/
+.next/
+out/
+
+# env & OS
+.env*
+.DS_Store
+._*
+
+# archives & editor
+*.tar.gz
+.vscode/
