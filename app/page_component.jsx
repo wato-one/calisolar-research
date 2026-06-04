@@ -2,13 +2,14 @@
 import { useState, useEffect } from "react";
 import { masterGlossary } from "./master-glossary";
 import { reportSources, caMarketSizing } from "./report-sources";
+import { calisolarTheme as t, fontStylesheet } from "./calisolar-theme";
 
 const sourceById = Object.fromEntries(reportSources.map((s) => [s.id, s]));
 
 function SourceRefs({ ids }) {
   if (!ids?.length) return null;
   return (
-    <div style={{ marginTop: "10px", fontSize: "11px", color: "rgba(245,240,232,0.38)", lineHeight: 1.6 }}>
+    <div style={{ marginTop: "10px", fontSize: "11px", color: "rgba(78, 99, 148, 0.85)", lineHeight: 1.6 }}>
       <span style={{ fontWeight: 700, letterSpacing: "0.3px" }}>Nguồn: </span>
       {ids.map((id, i) => {
         const s = sourceById[id];
@@ -17,7 +18,7 @@ function SourceRefs({ ids }) {
           <span key={id}>
             {i > 0 && " · "}
             {s.url ? (
-              <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: "#F4A623", textDecoration: "none" }}>
+              <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: t.colors.accent, textDecoration: "none", fontWeight: 600 }}>
                 {s.label} ({s.accessed})
               </a>
             ) : (
@@ -37,16 +38,17 @@ function SectionSources({ ids, title = "Nguồn tham khảo — phần này" }) 
     <div style={{
       marginTop: "20px",
       padding: "14px 18px",
-      borderRadius: "6px",
-      background: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.05)",
+      borderRadius: "10px",
+      background: t.colors.white,
+      border: `1px solid ${t.colors.lineSoft}`,
+      boxShadow: t.colors.cardShadow,
     }}>
-      <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase", color: "rgba(245,240,232,0.35)", marginBottom: "8px" }}>{title}</div>
-      <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: "rgba(245,240,232,0.5)", lineHeight: 1.65 }}>
+      <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase", color: t.colors.muted, marginBottom: "8px" }}>{title}</div>
+      <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: t.colors.muted, lineHeight: 1.65 }}>
         {items.map((s) => (
           <li key={s.id} style={{ marginBottom: "4px" }}>
-            {s.url ? <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: "#F4A623", textDecoration: "none" }}>{s.title}</a> : s.title}
-            <span style={{ color: "rgba(245,240,232,0.3)" }}> — {s.label}, truy cập {s.accessed}</span>
+            {s.url ? <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: t.colors.accent, textDecoration: "none", fontWeight: 600 }}>{s.title}</a> : s.title}
+            <span style={{ color: "rgba(78, 99, 148, 0.65)" }}> — {s.label}, truy cập {s.accessed}</span>
             {s.note && <span style={{ display: "block", fontSize: "11px", marginTop: "2px" }}>{s.note}</span>}
           </li>
         ))}
@@ -66,17 +68,17 @@ function CaMarketSizingPanel({ card, h3, body }) {
     ["Dự báo residential Mỹ 2026", caMarketSizing.forecast2026],
   ];
   return (
-    <div style={{ ...card, borderLeft: "3px solid #1565C0", marginBottom: "28px" }}>
+    <div style={{ ...card, borderLeft: `3px solid ${t.colors.accent}`, marginBottom: "28px" }}>
       <h3 style={{ ...h3, fontSize: "16px" }}>Quy mô thị trường California ({caMarketSizing.asOf})</h3>
       <p style={{ ...body, marginBottom: "16px" }}>
-        Các con số dưới đây dùng để ước lượng <strong style={{ color: "#F4A623" }}>quy mô phân khúc</strong> (hộ/thị trường), không phải % doanh thu CaliSolar.
+        Các con số dưới đây dùng để ước lượng <strong style={{ color: t.colors.accent }}>quy mô phân khúc</strong> (hộ/thị trường), không phải % doanh thu CaliSolar.
       </p>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "10px" }}>
         {rows.map(([label, d]) => (
-          <div key={label} style={{ padding: "12px 14px", borderRadius: "6px", background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.04)" }}>
-            <div style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginBottom: "4px" }}>{label}</div>
-            <div style={{ fontSize: "15px", fontWeight: 700, color: "#F5F0E8" }}>{d.value}</div>
-            <div style={{ fontSize: "11px", color: "rgba(245,240,232,0.45)", marginTop: "4px", lineHeight: 1.5 }}>{d.note}</div>
+          <div key={label} style={{ padding: "12px 14px", borderRadius: "10px", background: t.colors.bgAlt, border: `1px solid ${t.colors.lineSoft}` }}>
+            <div style={{ fontSize: "11px", color: t.colors.muted, marginBottom: "4px" }}>{label}</div>
+            <div style={{ fontSize: "15px", fontWeight: 700, color: t.colors.ink }}>{d.value}</div>
+            <div style={{ fontSize: "11px", color: t.colors.muted, marginTop: "4px", lineHeight: 1.5 }}>{d.note}</div>
           </div>
         ))}
       </div>
@@ -177,33 +179,34 @@ function Badge({ type, children }) {
 function ForceBar({ level, color }) {
   return (
     <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
-      {[1,2,3,4,5].map(i => <div key={i} style={{ width: "28px", height: "10px", borderRadius: "2px", background: i <= Math.round(level) ? color : "rgba(150,150,150,0.15)" }} />)}
+      {[1,2,3,4,5].map(i => <div key={i} style={{ width: "28px", height: "10px", borderRadius: "2px", background: i <= Math.round(level) ? color : "rgba(14, 27, 71, 0.12)" }} />)}
       <span style={{ marginLeft: "8px", fontSize: "12px", fontWeight: 700, color }}>{level}/5</span>
     </div>
   );
 }
 
 function ThreatDots({ level }) {
-  return <div style={{ display: "flex", gap: "3px" }}>{[1,2,3,4,5].map(i => <div key={i} style={{ width: "8px", height: "8px", borderRadius: "50%", background: i <= level ? (level >= 4 ? "#C62828" : "#E65100") : "rgba(150,150,150,0.15)" }} />)}</div>;
+  return <div style={{ display: "flex", gap: "3px" }}>{[1,2,3,4,5].map(i => <div key={i} style={{ width: "8px", height: "8px", borderRadius: "50%", background: i <= level ? (level >= 4 ? "#C62828" : "#E65100") : "rgba(14, 27, 71, 0.12)" }} />)}</div>;
 }
 
 function SectionTermHint({ terms }) {
   const jumpToGlossary = () => document.getElementById("glossary")?.scrollIntoView({ behavior: "smooth", block: "start" });
   return (
     <div style={{
-      background: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.06)",
-      borderRadius: "6px",
+      background: t.colors.white,
+      border: `1px solid ${t.colors.lineSoft}`,
+      borderRadius: t.radius.md,
       padding: "12px 16px",
       marginBottom: "20px",
+      boxShadow: t.colors.cardShadow,
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
-        <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase", color: "rgba(245,240,232,0.4)" }}>Thuật ngữ trong phần này</span>
-        <button type="button" onClick={jumpToGlossary} style={{ background: "none", border: "none", color: "#F4A623", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", padding: 0 }}>Bảng thuật ngữ đầy đủ →</button>
+        <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase", color: t.colors.muted }}>Thuật ngữ trong phần này</span>
+        <button type="button" onClick={jumpToGlossary} style={{ background: "none", border: "none", color: t.colors.accent, fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", padding: 0 }}>Bảng thuật ngữ đầy đủ →</button>
       </div>
-      <div style={{ fontSize: "12px", color: "rgba(245,240,232,0.55)", lineHeight: 1.6, display: "flex", flexDirection: "column", gap: "4px" }}>
-        {terms.map((t, i) => (
-          <div key={i}><strong style={{ color: "#F4A623", fontWeight: 600 }}>{t.term}</strong> — {t.def}</div>
+      <div style={{ fontSize: "12px", color: t.colors.muted, lineHeight: 1.6, display: "flex", flexDirection: "column", gap: "4px" }}>
+        {terms.map((term, i) => (
+          <div key={i}><strong style={{ color: t.colors.accent, fontWeight: 600 }}>{term.term}</strong> — {term.def}</div>
         ))}
       </div>
     </div>
@@ -213,19 +216,19 @@ function SectionTermHint({ terms }) {
 function TermGlossary({ title = "Bảng thuật ngữ — toàn báo cáo", terms }) {
   return (
     <div style={{
-      background: "rgba(244,166,35,0.06)",
-      border: "1px solid rgba(244,166,35,0.22)",
-      borderRadius: "8px",
+      background: "rgba(31, 74, 184, 0.06)",
+      border: `1px solid rgba(31, 74, 184, 0.18)`,
+      borderRadius: t.radius.md,
       padding: "20px 24px",
       marginBottom: "24px",
     }}>
-      <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#F4A623", marginBottom: "14px" }}>{title}</div>
+      <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: t.colors.accent, marginBottom: "14px" }}>{title}</div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px 32px" }}>
-        {terms.map((t, i) => (
+        {terms.map((term, i) => (
           <div key={i} style={{ paddingBottom: "4px" }}>
-            <span style={{ fontSize: "14px", fontWeight: 700, color: "#F4A623" }}>{t.term}</span>
-            {t.en && <span style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginLeft: "6px" }}>{t.en}</span>}
-            <p style={{ fontSize: "13px", color: "rgba(245,240,232,0.72)", lineHeight: 1.75, margin: "8px 0 0" }}>{t.def}</p>
+            <span style={{ fontSize: "14px", fontWeight: 700, color: t.colors.accent }}>{term.term}</span>
+            {term.en && <span style={{ fontSize: "11px", color: t.colors.muted, marginLeft: "6px" }}>{term.en}</span>}
+            <p style={{ fontSize: "13px", color: t.colors.ink, lineHeight: 1.75, margin: "8px 0 0", opacity: 0.88 }}>{term.def}</p>
           </div>
         ))}
       </div>
@@ -329,7 +332,7 @@ const journeyStages = [
   },
   {
     num: "05", title: "DECIDE", subtitle: "Ký hợp đồng", duration: "1-5 ngày",
-    icon: "✍️", color: "#F4A623", bgColor: "rgba(244,166,35,0.08)",
+    icon: "✍️", color: "#1f4ab8", bgColor: "rgba(31,74,184,0.08)",
     triggers: [
       { label: "Financing phù hợp", desc: "PPA $0 down hoặc loan terms chấp nhận được", pct: null },
       { label: "Trust đã đủ", desc: "Reviews tốt + salesperson transparent", pct: null },
@@ -365,7 +368,7 @@ const journeyStages = [
 /** % = ước lượng phân khúc trên TAM ~4.0M hộ CA chưa lắp solar (xem CaMarketSizingPanel) */
 const TAM_CA_HOUSEHOLDS = 4.0;
 const segments = [
-  { name: "The Bill Shocked", pct: "40–45%", sizeCA: "~1.6–1.8 triệu hộ", tag: "PRIMARY", tagColor: "#F4A623", profile: "Homeowner 35–55 tuổi, hóa đơn $200–500+/tháng (SCE territory)", trigger: "Mở bill mùa hè, shock TOU on-peak ~58¢/kWh", research: "Google 'why is my electric bill so high' → 'solar cost CA'", financing: "$0 down, PPA hoặc loan — muốn savings ngay", barrier: "Sợ sales trick → cần review & minh bạch giá", channel: "Google Ads, calculator landing, SCE rate content" },
+  { name: "The Bill Shocked", pct: "40–45%", sizeCA: "~1.6–1.8 triệu hộ", tag: "PRIMARY", tagColor: "#1f4ab8", profile: "Homeowner 35–55 tuổi, hóa đơn $200–500+/tháng (SCE territory)", trigger: "Mở bill mùa hè, shock TOU on-peak ~58¢/kWh", research: "Google 'why is my electric bill so high' → 'solar cost CA'", financing: "$0 down, PPA hoặc loan — muốn savings ngay", barrier: "Sợ sales trick → cần review & minh bạch giá", channel: "Google Ads, calculator landing, SCE rate content" },
   { name: "The Resilience Seeker", pct: "20–25%", sizeCA: "~0.8–1.0 triệu hộ", tag: "GROWING", tagColor: "#2E7D32", profile: "40–65 tuổi, PG&E/SCE vùng PSPS/wildfire", trigger: "PSPS hoặc mất điện nhiều ngày", research: "'solar battery backup', SGIP, Tesla Powerwall", financing: "Cash/loan gói pin; SGIP giảm capex", barrier: "Giá pin + hiểu biết kỹ thuật", channel: "Backup content, post-PSPS referral" },
   { name: "The Smart Investor", pct: "15–20%", sizeCA: "~0.6–0.8 triệu hộ", tag: "ANALYTICAL", tagColor: "#1565C0", profile: "30–50 tuổi, so sánh ROI/NPV kỹ", trigger: "Lock chi phí năng lượng vs giá điện dài hạn", research: "EnergySage 3–5 quotes, SolarReviews, LBNL home-value studies", financing: "Cash/loan solar-owned (literature ~4–7% premium giá nhà, tùy market)", barrier: "Post-ITC cần model tài chính thật", channel: "EnergySage, SEO calculator, transparent proposal" },
   { name: "The Green Conscious", pct: "10–15%", sizeCA: "~0.4–0.6 triệu hộ", tag: "VALUES", tagColor: "#00695C", profile: "25–45 tuổi, thường có EV", trigger: "Giá trị bền vững + tiết kiệm", research: "Blog xanh, EV groups, social", financing: "Linh hoạt; hay bundle EV charger + solar", barrier: "Vẫn cần ROI hợp lý sau ITC", channel: "Social, EV dealer partnerships" },
@@ -406,66 +409,133 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
-  const sectionWrap = { scrollMarginTop: "72px", marginBottom: "64px", paddingTop: "8px" };
-  const card = { background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", padding: "24px", marginBottom: "16px" };
-  const h2 = { fontSize: "28px", fontWeight: 800, marginBottom: "8px", letterSpacing: "-0.5px", color: "#F5F0E8" };
-  const h3 = { fontSize: "18px", fontWeight: 700, marginBottom: "12px", color: "#F5F0E8" };
-  const body = { fontSize: "14px", lineHeight: "1.7", color: "rgba(245,240,232,0.75)" };
+  const sectionWrap = { scrollMarginTop: "88px", marginBottom: "64px", paddingTop: "8px" };
+  const card = {
+    background: t.colors.white,
+    border: `1px solid ${t.colors.lineSoft}`,
+    borderRadius: t.radius.md,
+    padding: "24px",
+    marginBottom: "16px",
+    boxShadow: t.colors.cardShadow,
+  };
+  const h2 = { fontFamily: t.fonts.display, fontSize: "28px", fontWeight: 800, marginBottom: "8px", letterSpacing: "-0.5px", color: t.colors.ink };
+  const h3 = { fontFamily: t.fonts.display, fontSize: "18px", fontWeight: 700, marginBottom: "12px", color: t.colors.ink };
+  const body = { fontSize: "14px", lineHeight: 1.62, color: t.colors.muted };
+
+  const pageBg = {
+    fontFamily: t.fonts.body,
+    color: t.colors.ink,
+    minHeight: "100vh",
+    background: `radial-gradient(circle at 12% -12%, rgba(31, 74, 184, 0.14), transparent 40%), radial-gradient(circle at 100% 16%, rgba(16, 47, 125, 0.12), transparent 44%), ${t.colors.bg}`,
+  };
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#0D0D0D", color: "#F5F0E8", minHeight: "100vh" }}>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+    <div style={pageBg}>
+      <link href={fontStylesheet} rel="stylesheet" />
 
-      {/* HEADER */}
-      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 24px" }}>
-        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-            <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#F4A623" }} />
-            <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", color: "rgba(245,240,232,0.4)" }}>CaliSolar · Industry Research</span>
-          </div>
-          <h1 style={{ fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.1, margin: "0 0 8px" }}>
-            Phân Tích Ngành Solar<br /><span style={{ color: "#F4A623" }}>Residential California 2026</span>
+      <header style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 40,
+        backdropFilter: "blur(11px)",
+        background: "rgba(245, 248, 255, 0.92)",
+        borderBottom: `1px solid ${t.colors.lineSoft}`,
+      }}>
+        <div style={{ maxWidth: t.maxWidth, margin: "0 auto", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+          <a href={t.siteUrl} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: t.colors.ink }}>
+            <img src={t.logoUrl} alt="CaliSolar" style={{ height: "40px", width: "auto" }} />
+            <span style={{ fontFamily: t.fonts.display, fontWeight: 700, fontSize: "15px" }}>CaliSolar</span>
+          </a>
+          <a
+            href={`${t.siteUrl}contact/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              padding: "10px 18px",
+              borderRadius: t.radius.sm,
+              background: `linear-gradient(135deg, ${t.colors.accent} 0%, ${t.colors.accentDeep} 100%)`,
+              color: "#fff",
+              fontSize: "13px",
+              fontWeight: 600,
+              textDecoration: "none",
+              boxShadow: "0 10px 24px rgba(16, 47, 125, 0.25)",
+            }}
+          >
+            Get a Quote
+          </a>
+        </div>
+      </header>
+
+      <div style={{ padding: "40px 28px 28px", borderBottom: `1px solid ${t.colors.lineSoft}` }}>
+        <div style={{ maxWidth: t.maxWidth, margin: "0 auto" }}>
+          <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: t.colors.accentSoft, margin: "0 0 12px" }}>
+            Powering Homes with Better Solar · Industry Research
+          </p>
+          <h1 style={{ fontFamily: t.fonts.display, fontSize: "clamp(28px, 5vw, 44px)", fontWeight: 800, letterSpacing: "-1px", lineHeight: 1.12, margin: "0 0 12px", color: t.colors.ink }}>
+            Phân Tích Ngành Solar<br /><span style={{ color: t.colors.accent }}>Residential California 2026</span>
           </h1>
-          <p style={{ fontSize: "14px", color: "rgba(245,240,232,0.45)", margin: "0 0 10px" }}>Thuật ngữ · PESTEL · Porter · Consumer · Path to Purchase · Chiến lược</p>
-          <p style={{ fontSize: "12px", color: "rgba(244,166,35,0.7)", margin: 0 }}>Kiểm chứng dữ liệu: tháng 6/2026 — SEIA 2025 YiR, SCE, EnergySage, Census, California DGStats</p>
+          <p style={{ fontSize: "15px", color: t.colors.muted, margin: "0 0 8px", maxWidth: "640px" }}>
+            Báo cáo nội bộ: PESTEL, Porter, Consumer Deep Dive, Path to Purchase — căn chỉnh chiến lược với thị trường CA sau ITC.
+          </p>
+          <p style={{ fontSize: "12px", color: t.colors.accent, margin: 0, fontWeight: 500 }}>
+            Kiểm chứng dữ liệu: tháng 6/2026 — SEIA, SCE, EnergySage, Census, California DGStats
+          </p>
         </div>
       </div>
 
-      {/* NAV */}
-      <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#0D0D0D", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "0 24px" }}>
-        <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex", gap: "4px", overflowX: "auto" }}>
+      <div style={{ position: "sticky", top: "68px", zIndex: 30, background: "rgba(245, 248, 255, 0.95)", borderBottom: `1px solid ${t.colors.lineSoft}`, padding: "0 28px", backdropFilter: "blur(8px)" }}>
+        <div style={{ maxWidth: t.maxWidth, margin: "0 auto", display: "flex", gap: "4px", overflowX: "auto" }}>
           {sections.map(s => (
-            <button key={s.id} type="button" onClick={() => scrollToSection(s.id)} style={{ background: active === s.id ? "rgba(244,166,35,0.12)" : "transparent", border: "none", color: active === s.id ? "#F4A623" : "rgba(245,240,232,0.4)", padding: "14px 14px", fontSize: "13px", fontWeight: active === s.id ? 700 : 500, cursor: "pointer", borderBottom: active === s.id ? "2px solid #F4A623" : "2px solid transparent", whiteSpace: "nowrap", fontFamily: "inherit" }}>{s.label}</button>
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => scrollToSection(s.id)}
+              style={{
+                background: active === s.id ? "rgba(31, 74, 184, 0.1)" : "transparent",
+                border: "none",
+                color: active === s.id ? t.colors.accent : t.colors.muted,
+                padding: "14px 14px",
+                fontSize: "13px",
+                fontWeight: active === s.id ? 700 : 500,
+                cursor: "pointer",
+                borderBottom: active === s.id ? `2px solid ${t.colors.accent}` : "2px solid transparent",
+                whiteSpace: "nowrap",
+                fontFamily: "inherit",
+              }}
+            >
+              {s.label}
+            </button>
           ))}
         </div>
       </div>
 
-      {/* CONTENT */}
-      <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 24px 80px" }}>
+      <div style={{ maxWidth: t.maxWidth, margin: "0 auto", padding: "40px 28px 80px" }}>
 
         {/* ===== OVERVIEW ===== */}
         <section id="overview" style={sectionWrap}>
           <h2 style={h2}>Tổng Quan CaliSolar & Chuỗi Giá Trị</h2>
           <SectionTermHint terms={sectionHints.overview} />
-          <p style={{ ...body, marginBottom: "24px" }}>CaliSolar hoạt động với mô hình <strong style={{ color: "#F4A623" }}>authorized dealer</strong> — tư vấn, thiết kế, financing, hỗ trợ khách hàng. Lắp đặt do Simple Power (CA C-10 #1,111,652) thực hiện.</p>
+          <p style={{ ...body, marginBottom: "24px" }}>CaliSolar hoạt động với mô hình <strong style={{ color: "#1f4ab8" }}>authorized dealer</strong> — tư vấn, thiết kế, financing, hỗ trợ khách hàng. Lắp đặt do Simple Power (CA C-10 #1,111,652) thực hiện.</p>
           <div style={{ ...card, padding: 0, overflow: "hidden" }}>
-            <div style={{ padding: "16px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
-              <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "rgba(245,240,232,0.5)" }}>Chuỗi Giá Trị Solar Residential</span>
+            <div style={{ padding: "16px 24px", borderBottom: "1px solid rgba(14, 27, 71, 0.1)", background: "#ffffff" }}>
+              <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "rgba(78, 99, 148, 0.85)" }}>Chuỗi Giá Trị Solar Residential</span>
             </div>
             <div style={{ padding: "24px", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center", justifyContent: "center" }}>
               {["Nhà SX Panel", "Phân phối", "Dealer/Installer", "Financing", "O&M"].map((s, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <div style={{ padding: "10px 16px", borderRadius: "6px", fontSize: "13px", fontWeight: 600, background: i === 2 ? "rgba(244,166,35,0.15)" : "rgba(255,255,255,0.04)", border: i === 2 ? "1px solid #F4A623" : "1px solid rgba(255,255,255,0.06)", color: i === 2 ? "#F4A623" : "rgba(245,240,232,0.6)" }}>
+                  <div style={{ padding: "10px 16px", borderRadius: "10px", fontSize: "13px", fontWeight: 600, background: i === 2 ? "rgba(31,74,184,0.15)" : "rgba(14, 27, 71, 0.06)", border: i === 2 ? "1px solid #1f4ab8" : "1px solid rgba(14, 27, 71, 0.1)", color: i === 2 ? "#1f4ab8" : "rgba(78, 99, 148, 0.92)" }}>
                     {s}{i === 2 && <span style={{ display: "block", fontSize: "10px", fontWeight: 400, opacity: 0.7 }}>← CaliSolar</span>}
                   </div>
-                  {i < 4 && <span style={{ color: "rgba(245,240,232,0.2)", fontSize: "18px" }}>→</span>}
+                  {i < 4 && <span style={{ color: "rgba(78, 99, 148, 0.55)", fontSize: "18px" }}>→</span>}
                 </div>
               ))}
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px", marginTop: "24px" }}>
             {[{ n: "132+", l: "Installations", s: "Nội bộ CaliSolar" }, { n: "$2.53", l: "$/W CA (ES)", s: "vs $3.39 Mỹ SEIA" }, { n: "34.5¢", l: "SCE avg/kWh", s: "TOU peak ~58¢" }, { n: "−19%", l: "US res. 2026", s: "SEIA forecast" }].map((x, i) => (
-              <div key={i} style={card}><div style={{ fontSize: "28px", fontWeight: 800, color: i === 3 ? "#C62828" : "#F4A623", letterSpacing: "-1px" }}>{x.n}</div><div style={{ fontSize: "13px", fontWeight: 600, color: "#F5F0E8", marginTop: "4px" }}>{x.l}</div><div style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginTop: "2px" }}>{x.s}</div></div>
+              <div key={i} style={card}><div style={{ fontSize: "28px", fontWeight: 800, color: i === 3 ? "#C62828" : t.colors.accent, letterSpacing: "-1px", fontFamily: t.fonts.display }}>{x.n}</div><div style={{ fontSize: "13px", fontWeight: 600, color: t.colors.ink, marginTop: "4px" }}>{x.l}</div><div style={{ fontSize: "11px", color: t.colors.muted, marginTop: "2px" }}>{x.s}</div></div>
             ))}
           </div>
           <SourceRefs ids={["cali-company", "energysage-ca", "seia-smi-2025", "sce-rates"]} />
@@ -479,13 +549,13 @@ export default function App() {
           {pestelData.map((cat, ci) => (
             <div key={ci} style={{ ...card, borderLeft: `3px solid ${cat.color}` }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-                <div style={{ width: "36px", height: "36px", borderRadius: "6px", background: cat.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", fontWeight: 800, flexShrink: 0 }}>{cat.letter}</div>
-                <div style={{ flex: 1 }}><div style={{ fontSize: "16px", fontWeight: 700 }}>{cat.title}</div><div style={{ fontSize: "12px", color: "rgba(245,240,232,0.4)" }}>{cat.items.length} yếu tố</div></div>
+                <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: cat.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", fontWeight: 800, flexShrink: 0 }}>{cat.letter}</div>
+                <div style={{ flex: 1 }}><div style={{ fontSize: "16px", fontWeight: 700 }}>{cat.title}</div><div style={{ fontSize: "12px", color: "rgba(78, 99, 148, 0.75)" }}>{cat.items.length} yếu tố</div></div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>{cat.items.map((it, ii) => (
-                <div key={ii} style={{ padding: "16px", borderRadius: "6px", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.04)" }}>
+                <div key={ii} style={{ padding: "16px", borderRadius: "10px", background: "rgba(14, 27, 71, 0.05)", border: "1px solid rgba(14, 27, 71, 0.06)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}><Badge type={it.impact}>{it.impact === "critical" ? "Nghiêm trọng" : it.impact === "high" ? "Cao" : it.impact === "opportunity" ? "Cơ hội" : "Insight"}</Badge><span style={{ fontSize: "14px", fontWeight: 700 }}>{it.headline}</span></div>
-                  <p style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.7, margin: 0 }}>{it.detail}</p>
+                  <p style={{ fontSize: "13px", color: "rgba(78, 99, 148, 0.92)", lineHeight: 1.7, margin: 0 }}>{it.detail}</p>
                   {it.sourceIds && <SourceRefs ids={it.sourceIds} />}
                 </div>
               ))}</div>
@@ -505,7 +575,7 @@ export default function App() {
                 <h3 style={{ fontSize: "16px", fontWeight: 700, margin: 0 }}>{f.force}</h3>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}><ForceBar level={f.level} color={f.color} /><span style={{ fontSize: "11px", fontWeight: 700, color: f.color }}>{f.levelLabel}</span></div>
               </div>
-              <ul style={{ margin: 0, paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>{f.points.map((p, pi) => <li key={pi} style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.6 }}>{p}</li>)}</ul>
+              <ul style={{ margin: 0, paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>{f.points.map((p, pi) => <li key={pi} style={{ fontSize: "13px", color: "rgba(78, 99, 148, 0.92)", lineHeight: 1.6 }}>{p}</li>)}</ul>
             </div>
           ))}
           <SectionSources ids={["seia-smi-2025", "energysage-ca", "energysage-marketplace", "solarreviews"]} />
@@ -519,17 +589,17 @@ export default function App() {
             {competitorData.map((c, ci) => (
               <div key={ci} style={card}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px", flexWrap: "wrap", gap: "8px" }}>
-                  <div><div style={{ fontSize: "16px", fontWeight: 700 }}>{c.name}</div><div style={{ display: "flex", gap: "8px", marginTop: "4px", alignItems: "center" }}><span style={{ fontSize: "11px", padding: "2px 8px", borderRadius: "3px", background: "rgba(255,255,255,0.06)", color: "rgba(245,240,232,0.5)", fontWeight: 600 }}>{c.type}</span><span style={{ fontSize: "12px", color: "rgba(245,240,232,0.4)" }}>{c.rating}</span></div></div>
-                  <div style={{ textAlign: "right" }}><div style={{ fontSize: "10px", color: "rgba(245,240,232,0.4)", marginBottom: "4px" }}>Mức đe dọa</div><ThreatDots level={c.threat} /></div>
+                  <div><div style={{ fontSize: "16px", fontWeight: 700 }}>{c.name}</div><div style={{ display: "flex", gap: "8px", marginTop: "4px", alignItems: "center" }}><span style={{ fontSize: "11px", padding: "2px 8px", borderRadius: "3px", background: "rgba(14, 27, 71, 0.1)", color: "rgba(78, 99, 148, 0.85)", fontWeight: 600 }}>{c.type}</span><span style={{ fontSize: "12px", color: "rgba(78, 99, 148, 0.75)" }}>{c.rating}</span></div></div>
+                  <div style={{ textAlign: "right" }}><div style={{ fontSize: "10px", color: "rgba(78, 99, 148, 0.75)", marginBottom: "4px" }}>Mức đe dọa</div><ThreatDots level={c.threat} /></div>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                  <div><div style={{ fontSize: "11px", fontWeight: 700, color: "#2E7D32", letterSpacing: "0.5px", marginBottom: "4px" }}>THẾ MẠNH</div><div style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.6 }}>{c.strengths}</div></div>
-                  <div><div style={{ fontSize: "11px", fontWeight: 700, color: "#C62828", letterSpacing: "0.5px", marginBottom: "4px" }}>ĐIỂM YẾU</div><div style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.6 }}>{c.weaknesses}</div></div>
+                  <div><div style={{ fontSize: "11px", fontWeight: 700, color: "#2E7D32", letterSpacing: "0.5px", marginBottom: "4px" }}>THẾ MẠNH</div><div style={{ fontSize: "13px", color: "rgba(78, 99, 148, 0.92)", lineHeight: 1.6 }}>{c.strengths}</div></div>
+                  <div><div style={{ fontSize: "11px", fontWeight: 700, color: "#C62828", letterSpacing: "0.5px", marginBottom: "4px" }}>ĐIỂM YẾU</div><div style={{ fontSize: "13px", color: "rgba(78, 99, 148, 0.92)", lineHeight: 1.6 }}>{c.weaknesses}</div></div>
                 </div>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: "11px", color: "rgba(245,240,232,0.35)", marginTop: "8px" }}>Rating/đe dọa: snapshot Q2/2026 — xác minh trên SolarReviews/Google trước khi dùng sales battlecard.</p>
+          <p style={{ fontSize: "11px", color: "rgba(78, 99, 148, 0.7)", marginTop: "8px" }}>Rating/đe dọa: snapshot Q2/2026 — xác minh trên SolarReviews/Google trước khi dùng sales battlecard.</p>
           <SectionSources ids={["solarreviews", "energysage-marketplace", "seia-smi-2025"]} />
         </section>
 
@@ -545,14 +615,14 @@ export default function App() {
             {infoSources.map((src, i) => (
               <div key={i} style={card}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
-                  <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "rgba(244,166,35,0.1)", border: "1px solid rgba(244,166,35,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", fontWeight: 800, color: "#F4A623", flexShrink: 0 }}>{src.rank}</div>
+                  <div style={{ width: "40px", height: "40px", borderRadius: "14px", background: "rgba(31,74,184,0.1)", border: "1px solid rgba(31,74,184,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", fontWeight: 800, color: "#1f4ab8", flexShrink: 0 }}>{src.rank}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                      <span style={{ fontSize: "15px", fontWeight: 700, color: "#F5F0E8" }}>{src.name}</span>
-                      <span style={{ fontSize: "12px", color: "#F4A623" }}>{"★".repeat(src.importance)}{"☆".repeat(5 - src.importance)}</span>
+                      <span style={{ fontSize: "15px", fontWeight: 700, color: "#0e1b47" }}>{src.name}</span>
+                      <span style={{ fontSize: "12px", color: "#1f4ab8" }}>{"★".repeat(src.importance)}{"☆".repeat(5 - src.importance)}</span>
                     </div>
-                    <div style={{ fontSize: "12px", fontWeight: 600, color: "rgba(245,240,232,0.5)", marginBottom: "6px" }}>{src.desc}</div>
-                    <div style={{ fontSize: "13px", color: "rgba(245,240,232,0.55)", lineHeight: 1.6 }}>{src.detail}</div>
+                    <div style={{ fontSize: "12px", fontWeight: 600, color: "rgba(78, 99, 148, 0.85)", marginBottom: "6px" }}>{src.desc}</div>
+                    <div style={{ fontSize: "13px", color: "rgba(78, 99, 148, 0.88)", lineHeight: 1.6 }}>{src.detail}</div>
                   </div>
                 </div>
               </div>
@@ -572,18 +642,18 @@ export default function App() {
               { rank: 7, factor: "Battery / storage options", detail: "73% muốn nhưng chỉ 40% mua. NEM 3.0 làm battery gần bắt buộc. SGIP rebate available.", pct: 60 },
               { rank: 8, factor: "Home value impact", detail: "Solar-owned: literature LBNL/ Berkeley Lab thường ghi nhận premium (mức % tùy bang & thời điểm — không dùng một số cố định). TPO/lease thường không chuyển asset. Quan trọng với Smart Investor.", pct: 45 },
             ].map((f, i) => (
-              <div key={i} style={{ padding: "12px 0", borderBottom: i < 7 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+              <div key={i} style={{ padding: "12px 0", borderBottom: i < 7 ? "1px solid rgba(14, 27, 71, 0.06)" : "none" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: i < 3 ? "#F4A623" : "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800, color: i < 3 ? "#0D0D0D" : "rgba(245,240,232,0.4)", flexShrink: 0 }}>{f.rank}</div>
+                  <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: i < 3 ? "#1f4ab8" : "rgba(14, 27, 71, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800, color: i < 3 ? "#f5f8ff" : "rgba(78, 99, 148, 0.75)", flexShrink: 0 }}>{f.rank}</div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: "14px", fontWeight: 700, color: "#F5F0E8" }}>{f.factor}</div>
-                    <div style={{ fontSize: "12px", color: "rgba(245,240,232,0.5)", lineHeight: 1.5, marginTop: "2px" }}>{f.detail}</div>
+                    <div style={{ fontSize: "14px", fontWeight: 700, color: "#0e1b47" }}>{f.factor}</div>
+                    <div style={{ fontSize: "12px", color: "rgba(78, 99, 148, 0.85)", lineHeight: 1.5, marginTop: "2px" }}>{f.detail}</div>
                   </div>
                   <div style={{ width: "60px", textAlign: "right" }}>
-                    <div style={{ height: "6px", borderRadius: "3px", background: "rgba(255,255,255,0.06)", overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${f.pct}%`, background: i < 3 ? "#F4A623" : "rgba(244,166,35,0.4)", borderRadius: "3px" }} />
+                    <div style={{ height: "6px", borderRadius: "3px", background: "rgba(14, 27, 71, 0.1)", overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${f.pct}%`, background: i < 3 ? "#1f4ab8" : "rgba(31,74,184,0.4)", borderRadius: "3px" }} />
                     </div>
-                    <div style={{ fontSize: "10px", color: "rgba(245,240,232,0.3)", marginTop: "2px" }}>{f.pct}%</div>
+                    <div style={{ fontSize: "10px", color: "rgba(78, 99, 148, 0.65)", marginTop: "2px" }}>{f.pct}%</div>
                   </div>
                 </div>
               </div>
@@ -593,20 +663,20 @@ export default function App() {
           {/* SEGMENTS */}
           <h3 style={h3}>Phân khúc khách hàng California 2026</h3>
           <p style={{ ...body, marginBottom: "16px" }}>
-            Cột <strong style={{ color: "#F4A623" }}>%</strong> = tỷ trọng persona trên TAM ~{TAM_CA_HOUSEHOLDS} triệu hộ chưa lắp solar.
-            Cột <strong style={{ color: "#F4A623" }}>Quy mô CA</strong> = % × TAM (làm tròn; không cộng chính xác 100% vì overlap hành vi).
+            Cột <strong style={{ color: "#1f4ab8" }}>%</strong> = tỷ trọng persona trên TAM ~{TAM_CA_HOUSEHOLDS} triệu hộ chưa lắp solar.
+            Cột <strong style={{ color: "#1f4ab8" }}>Quy mô CA</strong> = % × TAM (làm tròn; không cộng chính xác 100% vì overlap hành vi).
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "32px" }}>
             {segments.map((seg, i) => (
               <div key={i} style={card}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
                   <span style={{ padding: "3px 10px", borderRadius: "3px", background: seg.tagColor, fontSize: "10px", fontWeight: 700, letterSpacing: "0.5px" }}>{seg.tag}</span>
-                  <span style={{ fontSize: "16px", fontWeight: 700, color: "#F5F0E8" }}>{seg.name}</span>
+                  <span style={{ fontSize: "16px", fontWeight: 700, color: "#0e1b47" }}>{seg.name}</span>
                   <span style={{ fontSize: "12px", fontWeight: 600, color: seg.tagColor, marginLeft: "auto" }}>{seg.pct} · {seg.sizeCA}</span>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
                   {[{ l: "Hồ sơ", v: seg.profile }, { l: "Trigger", v: seg.trigger }, { l: "Hành vi research", v: seg.research }, { l: "Financing preference", v: seg.financing }, { l: "Rào cản chính", v: seg.barrier }, { l: "Kênh hiệu quả", v: seg.channel }].map((f, fi) => (
-                    <div key={fi}><div style={{ fontSize: "10px", fontWeight: 700, color: "rgba(245,240,232,0.35)", letterSpacing: "0.5px", marginBottom: "3px", textTransform: "uppercase" }}>{f.l}</div><div style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.5 }}>{f.v}</div></div>
+                    <div key={fi}><div style={{ fontSize: "10px", fontWeight: 700, color: "rgba(78, 99, 148, 0.7)", letterSpacing: "0.5px", marginBottom: "3px", textTransform: "uppercase" }}>{f.l}</div><div style={{ fontSize: "13px", color: "rgba(78, 99, 148, 0.92)", lineHeight: 1.5 }}>{f.v}</div></div>
                   ))}
                 </div>
               </div>
@@ -624,7 +694,7 @@ export default function App() {
               { title: "Review window: 7 ngày", desc: "Cảm xúc tích cực cao nhất ngay sau PTO. Yêu cầu review trong 7 ngày đầu = tỷ lệ 5★ cao nhất. Sau 30 ngày = quá muộn." },
               { title: "Referral happens naturally", desc: "Hàng xóm hỏi → khoe monitoring app → giới thiệu. Referral program với incentive tăng tốc. Conversion rate cao nhất trong tất cả lead sources." },
             ].map((h, i) => (
-              <div key={i} style={card}><div style={{ fontSize: "14px", fontWeight: 700, color: "#F5F0E8", marginBottom: "6px" }}>{h.title}</div><div style={{ fontSize: "13px", color: "rgba(245,240,232,0.55)", lineHeight: 1.6 }}>{h.desc}</div></div>
+              <div key={i} style={card}><div style={{ fontSize: "14px", fontWeight: 700, color: "#0e1b47", marginBottom: "6px" }}>{h.title}</div><div style={{ fontSize: "13px", color: "rgba(78, 99, 148, 0.88)", lineHeight: 1.6 }}>{h.desc}</div></div>
             ))}
           </div>
 
@@ -659,11 +729,11 @@ export default function App() {
           <h2 style={h2}>Path to Purchase</h2>
           <SectionTermHint terms={sectionHints.journey} />
           <p style={{ ...body, marginBottom: "8px" }}>Hành trình 7 giai đoạn từ kích hoạt nhu cầu đến trở thành người giới thiệu. Tổng timeline: 2-8 tuần (Trigger → Decision) + 3-12 tuần (Install → PTO).</p>
-          <p style={{ fontSize: "12px", color: "rgba(245,240,232,0.35)", marginBottom: "32px" }}>Cuộn xuống để xem chi tiết từng giai đoạn — hoặc dùng menu phía trên để nhảy nhanh.</p>
+          <p style={{ fontSize: "12px", color: "rgba(78, 99, 148, 0.7)", marginBottom: "32px" }}>Cuộn xuống để xem chi tiết từng giai đoạn — hoặc dùng menu phía trên để nhảy nhanh.</p>
 
           {/* VISUAL JOURNEY LINE */}
           <div style={{ position: "relative", marginBottom: "40px" }}>
-            <div style={{ position: "absolute", top: "24px", left: "24px", right: "24px", height: "2px", background: "linear-gradient(90deg, #C62828, #1565C0, #6A1B9A, #2E7D32, #F4A623, #00695C, #E65100)", opacity: 0.3 }} />
+            <div style={{ position: "absolute", top: "24px", left: "24px", right: "24px", height: "2px", background: "linear-gradient(90deg, #C62828, #1565C0, #6A1B9A, #2E7D32, #1f4ab8, #00695C, #E65100)", opacity: 0.3 }} />
             <div style={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
               {journeyStages.map((s, i) => (
                 <div key={i} style={{ textAlign: "center", flex: 1, padding: "0 2px" }}>
@@ -675,7 +745,7 @@ export default function App() {
                     fontSize: "20px",
                   }}>{s.icon}</div>
                   <div style={{ fontSize: "10px", fontWeight: 800, color: s.color, letterSpacing: "0.5px" }}>{s.num}</div>
-                  <div style={{ fontSize: "11px", fontWeight: 600, color: "#F5F0E8", marginTop: "2px" }}>{s.title}</div>
+                  <div style={{ fontSize: "11px", fontWeight: 600, color: "#0e1b47", marginTop: "2px" }}>{s.title}</div>
                 </div>
               ))}
             </div>
@@ -688,35 +758,35 @@ export default function App() {
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <span style={{ fontSize: "12px", fontWeight: 800, color: stage.color, letterSpacing: "1px" }}>{stage.num}</span>
-                    <h3 style={{ fontSize: "20px", fontWeight: 800, margin: 0, color: "#F5F0E8" }}>{stage.title}</h3>
+                    <h3 style={{ fontSize: "20px", fontWeight: 800, margin: 0, color: "#0e1b47" }}>{stage.title}</h3>
                   </div>
-                  <div style={{ fontSize: "13px", color: "rgba(245,240,232,0.5)", marginTop: "2px" }}>{stage.subtitle}</div>
+                  <div style={{ fontSize: "13px", color: "rgba(78, 99, 148, 0.85)", marginTop: "2px" }}>{stage.subtitle}</div>
                 </div>
-                <div style={{ padding: "6px 14px", borderRadius: "20px", background: "rgba(255,255,255,0.06)", fontSize: "12px", fontWeight: 600, color: "rgba(245,240,232,0.5)" }}>⏱ {stage.duration}</div>
+                <div style={{ padding: "6px 14px", borderRadius: "20px", background: "rgba(14, 27, 71, 0.1)", fontSize: "12px", fontWeight: 600, color: "rgba(78, 99, 148, 0.85)" }}>⏱ {stage.duration}</div>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "10px", marginBottom: "16px" }}>
                 {stage.triggers.map((t, ti) => (
-                  <div key={ti} style={{ padding: "14px", borderRadius: "6px", background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.04)" }}>
+                  <div key={ti} style={{ padding: "14px", borderRadius: "10px", background: "rgba(14, 27, 71, 0.04)", border: "1px solid rgba(14, 27, 71, 0.06)" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#F5F0E8" }}>{t.label}</span>
+                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#0e1b47" }}>{t.label}</span>
                       {t.pct && <span style={{ fontSize: "12px", fontWeight: 800, color: stage.color }}>{t.pct}</span>}
                     </div>
-                    <div style={{ fontSize: "12px", color: "rgba(245,240,232,0.5)", lineHeight: 1.5 }}>{t.desc}</div>
+                    <div style={{ fontSize: "12px", color: "rgba(78, 99, 148, 0.85)", lineHeight: 1.5 }}>{t.desc}</div>
                   </div>
                 ))}
               </div>
 
-              <div style={{ padding: "12px 16px", borderRadius: "6px", background: `${stage.color}15`, border: `1px solid ${stage.color}30` }}>
+              <div style={{ padding: "12px 16px", borderRadius: "10px", background: `${stage.color}15`, border: `1px solid ${stage.color}30` }}>
                 <div style={{ fontSize: "11px", fontWeight: 700, color: stage.color, letterSpacing: "0.5px", marginBottom: "4px" }}>CALIFORNIA INSIGHT</div>
-                <div style={{ fontSize: "13px", color: "rgba(245,240,232,0.65)", lineHeight: 1.6 }}>{stage.caliBehavior}</div>
+                <div style={{ fontSize: "13px", color: "#4e6394", lineHeight: 1.6 }}>{stage.caliBehavior}</div>
               </div>
             </div>
           ))}
 
           {/* TIMELINE SUMMARY */}
           <div style={{ ...card, marginTop: "24px" }}>
-            <h3 style={{ ...h3, fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", color: "rgba(245,240,232,0.5)" }}>Timeline tổng hợp</h3>
+            <h3 style={{ ...h3, fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", color: "rgba(78, 99, 148, 0.85)" }}>Timeline tổng hợp</h3>
             <div style={{ display: "flex", gap: "4px", alignItems: "stretch", marginTop: "12px" }}>
               {[
                 { label: "Trigger→Research", w: "15%", color: "#C62828", time: "0-2 tuần" },
@@ -727,11 +797,11 @@ export default function App() {
               ].map((b, i) => (
                 <div key={i} style={{ flex: b.w, padding: "12px 8px", borderRadius: "4px", background: `${b.color}20`, borderTop: `3px solid ${b.color}`, textAlign: "center" }}>
                   <div style={{ fontSize: "10px", fontWeight: 700, color: b.color, letterSpacing: "0.3px" }}>{b.label}</div>
-                  <div style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginTop: "4px" }}>{b.time}</div>
+                  <div style={{ fontSize: "11px", color: "rgba(78, 99, 148, 0.75)", marginTop: "4px" }}>{b.time}</div>
                 </div>
               ))}
             </div>
-            <div style={{ marginTop: "12px", display: "flex", gap: "16px", justifyContent: "center", fontSize: "11px", color: "rgba(245,240,232,0.35)" }}>
+            <div style={{ marginTop: "12px", display: "flex", gap: "16px", justifyContent: "center", fontSize: "11px", color: "rgba(78, 99, 148, 0.7)" }}>
               <span>🏷 Referral leads: 1-3 tuần total</span>
               <span>🏷 Marketplace leads: 4-8 tuần total</span>
               <span>🏷 Cold leads: 6-12 tuần total</span>
@@ -750,7 +820,7 @@ export default function App() {
           </div>
 
           <div style={card}>
-            <h3 style={{ ...h3, color: "#F4A623" }}>🎯 Action Items ưu tiên</h3>
+            <h3 style={{ ...h3, color: "#1f4ab8" }}>🎯 Action Items ưu tiên</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               {[
                 { title: "Build social proof ngay", desc: "Mục tiêu 50+ Google reviews. Yêu cầu review trong 7 ngày sau PTO. Respond 100% reviews trong 24h. Rating 4.5+ = 3x organic leads." },
@@ -760,15 +830,15 @@ export default function App() {
                 { title: "SCE rate messaging", desc: "Nhấn TOU on-peak & bình quân ~34.5¢/kWh — không dùng % tăng 2026 sai (SCE 1/2026 −5%, 6/2026 −0.1%). ROI = lock năng lượng vs lịch sử bill tăng dài hạn." },
                 { title: "Referral program", desc: "Referral = highest conversion rate. Tạo incentive program: $250-500/referral cho khách hiện tại. Kết hợp realtor/roofer partnerships." },
               ].map((o, i) => (
-                <div key={i} style={{ padding: "16px", borderRadius: "6px", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.04)" }}>
-                  <div style={{ fontSize: "14px", fontWeight: 700, color: "#F5F0E8", marginBottom: "6px" }}>{o.title}</div>
-                  <div style={{ fontSize: "13px", color: "rgba(245,240,232,0.55)", lineHeight: 1.7 }}>{o.desc}</div>
+                <div key={i} style={{ padding: "16px", borderRadius: "10px", background: "rgba(14, 27, 71, 0.05)", border: "1px solid rgba(14, 27, 71, 0.06)" }}>
+                  <div style={{ fontSize: "14px", fontWeight: 700, color: "#0e1b47", marginBottom: "6px" }}>{o.title}</div>
+                  <div style={{ fontSize: "13px", color: "rgba(78, 99, 148, 0.88)", lineHeight: 1.7 }}>{o.desc}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div style={{ ...card, marginTop: "24px", borderLeft: "3px solid rgba(244,166,35,0.5)" }}>
+          <div style={{ ...card, marginTop: "24px", borderLeft: "3px solid rgba(31,74,184,0.5)" }}>
             <h3 style={{ ...h3, fontSize: "15px" }}>Ghi chú kiểm chứng (audit 06/2026)</h3>
             <ul style={{ margin: 0, paddingLeft: "18px", ...body, fontSize: "13px" }}>
               <li><strong>Đã cập nhật:</strong> $/W CA $2.53 (EnergySage); Mỹ $3.39 Q4/2025 (SEIA); SCE avg 34.5¢ & điều chỉnh 2026; ITC 25D hết + forecast −19% 2026.</li>
@@ -788,6 +858,34 @@ export default function App() {
         </section>
 
       </div>
+
+      <footer style={{
+        borderTop: `1px solid ${t.colors.lineSoft}`,
+        background: t.colors.dark,
+        color: "rgba(255,255,255,0.85)",
+        padding: "40px 28px",
+        marginTop: "24px",
+      }}>
+        <div style={{ maxWidth: t.maxWidth, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: "24px", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div>
+            <a href={t.siteUrl} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "#fff", marginBottom: "12px" }}>
+              <img src={t.logoUrl} alt="CaliSolar" style={{ height: "36px", filter: "brightness(0) invert(1)" }} />
+              <span style={{ fontFamily: t.fonts.display, fontWeight: 700 }}>CaliSolar</span>
+            </a>
+            <p style={{ fontSize: "13px", lineHeight: 1.6, margin: 0, maxWidth: "320px", opacity: 0.8 }}>
+              Affordable home solar for California homeowners. Installations by Simple Power, CA C-10 License #1,111,652.
+            </p>
+          </div>
+          <div style={{ fontSize: "13px" }}>
+            <div style={{ fontWeight: 700, marginBottom: "8px" }}>Contact</div>
+            <a href="tel:+17146433226" style={{ color: t.colors.accentSoft, textDecoration: "none", display: "block", marginBottom: "4px" }}>(714) 643-3226</a>
+            <a href="mailto:calisolar.sale@gmail.com" style={{ color: t.colors.accentSoft, textDecoration: "none", display: "block" }}>calisolar.sale@gmail.com</a>
+          </div>
+        </div>
+        <p style={{ fontSize: "11px", opacity: 0.5, margin: "24px 0 0", textAlign: "center" }}>
+          © {new Date().getFullYear()} CaliSolar · Industry research report · <a href={t.siteUrl} style={{ color: t.colors.accentSoft }}>calisolars.com</a>
+        </p>
+      </footer>
     </div>
   );
 }
