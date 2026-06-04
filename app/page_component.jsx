@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const sections = [
   { id: "overview", label: "Tổng Quan" },
@@ -199,9 +199,28 @@ const infoSources = [
 
 export default function App() {
   const [active, setActive] = useState("overview");
-  const [expandedPestel, setExpandedPestel] = useState(null);
-  const [expandedStage, setExpandedStage] = useState(0);
 
+  const scrollToSection = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setActive(id);
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]?.target?.id) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-72px 0px -55% 0px", threshold: [0, 0.1, 0.25] }
+    );
+    sections.forEach((s) => {
+      const el = document.getElementById(s.id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const sectionWrap = { scrollMarginTop: "72px", marginBottom: "64px", paddingTop: "8px" };
   const card = { background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", padding: "24px", marginBottom: "16px" };
   const h2 = { fontSize: "28px", fontWeight: 800, marginBottom: "8px", letterSpacing: "-0.5px", color: "#F5F0E8" };
   const h3 = { fontSize: "18px", fontWeight: 700, marginBottom: "12px", color: "#F5F0E8" };
@@ -229,7 +248,7 @@ export default function App() {
       <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#0D0D0D", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "0 24px" }}>
         <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex", gap: "4px", overflowX: "auto" }}>
           {sections.map(s => (
-            <button key={s.id} onClick={() => setActive(s.id)} style={{ background: active === s.id ? "rgba(244,166,35,0.12)" : "transparent", border: "none", color: active === s.id ? "#F4A623" : "rgba(245,240,232,0.4)", padding: "14px 14px", fontSize: "13px", fontWeight: active === s.id ? 700 : 500, cursor: "pointer", borderBottom: active === s.id ? "2px solid #F4A623" : "2px solid transparent", whiteSpace: "nowrap", fontFamily: "inherit" }}>{s.label}</button>
+            <button key={s.id} type="button" onClick={() => scrollToSection(s.id)} style={{ background: active === s.id ? "rgba(244,166,35,0.12)" : "transparent", border: "none", color: active === s.id ? "#F4A623" : "rgba(245,240,232,0.4)", padding: "14px 14px", fontSize: "13px", fontWeight: active === s.id ? 700 : 500, cursor: "pointer", borderBottom: active === s.id ? "2px solid #F4A623" : "2px solid transparent", whiteSpace: "nowrap", fontFamily: "inherit" }}>{s.label}</button>
           ))}
         </div>
       </div>
@@ -238,7 +257,7 @@ export default function App() {
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 24px 80px" }}>
 
         {/* ===== OVERVIEW ===== */}
-        {active === "overview" && (<div>
+        <section id="overview" style={sectionWrap}>
           <h2 style={h2}>Tổng Quan CaliSolar & Chuỗi Giá Trị</h2>
           <p style={{ ...body, marginBottom: "24px" }}>CaliSolar hoạt động với mô hình <strong style={{ color: "#F4A623" }}>authorized dealer</strong> — tư vấn, thiết kế, financing, hỗ trợ khách hàng. Lắp đặt do Simple Power (CA C-10 #1,111,652) thực hiện.</p>
           <div style={{ ...card, padding: 0, overflow: "hidden" }}>
@@ -261,31 +280,30 @@ export default function App() {
               <div key={i} style={card}><div style={{ fontSize: "28px", fontWeight: 800, color: i === 3 ? "#C62828" : "#F4A623", letterSpacing: "-1px" }}>{x.n}</div><div style={{ fontSize: "13px", fontWeight: 600, color: "#F5F0E8", marginTop: "4px" }}>{x.l}</div><div style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginTop: "2px" }}>{x.s}</div></div>
             ))}
           </div>
-        </div>)}
+        </section>
 
         {/* ===== PESTEL ===== */}
-        {active === "pestel" && (<div>
+        <section id="pestel" style={sectionWrap}>
           <h2 style={h2}>Phân Tích PESTEL</h2>
           <p style={{ ...body, marginBottom: "24px" }}>6 yếu tố vĩ mô ảnh hưởng ngành solar residential California 2026.</p>
           {pestelData.map((cat, ci) => (
-            <div key={ci} style={{ ...card, borderLeft: `3px solid ${cat.color}`, cursor: "pointer" }} onClick={() => setExpandedPestel(expandedPestel === ci ? null : ci)}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: expandedPestel === ci ? "16px" : 0 }}>
+            <div key={ci} style={{ ...card, borderLeft: `3px solid ${cat.color}` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
                 <div style={{ width: "36px", height: "36px", borderRadius: "6px", background: cat.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", fontWeight: 800, flexShrink: 0 }}>{cat.letter}</div>
                 <div style={{ flex: 1 }}><div style={{ fontSize: "16px", fontWeight: 700 }}>{cat.title}</div><div style={{ fontSize: "12px", color: "rgba(245,240,232,0.4)" }}>{cat.items.length} yếu tố</div></div>
-                <span style={{ fontSize: "18px", color: "rgba(245,240,232,0.3)", transform: expandedPestel === ci ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▼</span>
               </div>
-              {expandedPestel === ci && <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>{cat.items.map((it, ii) => (
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>{cat.items.map((it, ii) => (
                 <div key={ii} style={{ padding: "16px", borderRadius: "6px", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.04)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}><Badge type={it.impact}>{it.impact === "critical" ? "Nghiêm trọng" : it.impact === "high" ? "Cao" : it.impact === "opportunity" ? "Cơ hội" : "Insight"}</Badge><span style={{ fontSize: "14px", fontWeight: 700 }}>{it.headline}</span></div>
                   <p style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.7, margin: 0 }}>{it.detail}</p>
                 </div>
-              ))}</div>}
+              ))}</div>
             </div>
           ))}
-        </div>)}
+        </section>
 
         {/* ===== PORTER ===== */}
-        {active === "porter" && (<div>
+        <section id="porter" style={sectionWrap}>
           <h2 style={h2}>Porter's Five Forces</h2>
           <p style={{ ...body, marginBottom: "24px" }}>5 lực lượng cạnh tranh trong ngành solar residential California.</p>
           {porterData.map((f, fi) => (
@@ -297,10 +315,10 @@ export default function App() {
               <ul style={{ margin: 0, paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>{f.points.map((p, pi) => <li key={pi} style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.6 }}>{p}</li>)}</ul>
             </div>
           ))}
-        </div>)}
+        </section>
 
         {/* ===== LIFECYCLE ===== */}
-        {active === "lifecycle" && (<div>
+        <section id="lifecycle" style={sectionWrap}>
           <h2 style={h2}>Giai Đoạn Vòng Đời Ngành</h2>
           <div style={{ ...card, borderLeft: "3px solid #F4A623" }}>
             <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#F4A623", marginBottom: "8px" }}>Kết luận</div>
@@ -311,10 +329,10 @@ export default function App() {
             <div style={card}><h3 style={{ ...h3, color: "#C62828" }}>Headwinds</h3><ul style={{ margin: 0, paddingLeft: "16px", ...body }}><li>ITC hết hạn → ROI yếu hơn</li><li>Thuế quan tăng giá thiết bị</li><li>NEM 3.0 giảm giá trị export</li><li>Fixed charge CPUC mới</li><li>Residential giảm 19% năm 2026</li></ul></div>
             <div style={card}><h3 style={{ ...h3, color: "#2E7D32" }}>Tailwinds</h3><ul style={{ margin: 0, paddingLeft: "16px", ...body }}><li>Giá điện +83%/10 năm, +12.9% năm 2026</li><li>TPO/PPA vẫn được hưởng ITC</li><li>Battery storage +51% YoY</li><li>Consolidation → ít đối thủ hơn</li><li>Phục hồi 7%/năm từ 2027</li></ul></div>
           </div>
-        </div>)}
+        </section>
 
         {/* ===== COMPETITORS ===== */}
-        {active === "competitors" && (<div>
+        <section id="competitors" style={sectionWrap}>
           <h2 style={h2}>Đối Thủ Cạnh Tranh</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {competitorData.map((c, ci) => (
@@ -330,38 +348,35 @@ export default function App() {
               </div>
             ))}
           </div>
-        </div>)}
+        </section>
 
         {/* ===== PATH TO PURCHASE INFOGRAPHIC ===== */}
-        {active === "journey" && (<div>
+        <section id="journey" style={sectionWrap}>
           <h2 style={h2}>Path to Purchase</h2>
           <p style={{ ...body, marginBottom: "8px" }}>Hành trình 7 giai đoạn từ kích hoạt nhu cầu đến trở thành người giới thiệu. Tổng timeline: 2-8 tuần (Trigger → Decision) + 3-12 tuần (Install → PTO).</p>
-          <p style={{ fontSize: "12px", color: "rgba(245,240,232,0.35)", marginBottom: "32px" }}>Tap vào từng giai đoạn để xem chi tiết hành vi homeowner California.</p>
+          <p style={{ fontSize: "12px", color: "rgba(245,240,232,0.35)", marginBottom: "32px" }}>Cuộn xuống để xem chi tiết từng giai đoạn — hoặc dùng menu phía trên để nhảy nhanh.</p>
 
           {/* VISUAL JOURNEY LINE */}
           <div style={{ position: "relative", marginBottom: "40px" }}>
-            {/* Connecting line */}
             <div style={{ position: "absolute", top: "24px", left: "24px", right: "24px", height: "2px", background: "linear-gradient(90deg, #C62828, #1565C0, #6A1B9A, #2E7D32, #F4A623, #00695C, #E65100)", opacity: 0.3 }} />
             <div style={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
               {journeyStages.map((s, i) => (
-                <div key={i} onClick={() => setExpandedStage(i)} style={{ textAlign: "center", cursor: "pointer", flex: 1, padding: "0 2px" }}>
+                <div key={i} style={{ textAlign: "center", flex: 1, padding: "0 2px" }}>
                   <div style={{
                     width: "48px", height: "48px", borderRadius: "50%", margin: "0 auto 8px",
-                    background: expandedStage === i ? s.color : "rgba(255,255,255,0.05)",
-                    border: `2px solid ${expandedStage === i ? s.color : "rgba(255,255,255,0.1)"}`,
+                    background: `${s.color}22`,
+                    border: `2px solid ${s.color}`,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "20px", transition: "all 0.3s",
-                    boxShadow: expandedStage === i ? `0 0 20px ${s.color}40` : "none",
+                    fontSize: "20px",
                   }}>{s.icon}</div>
-                  <div style={{ fontSize: "10px", fontWeight: 800, color: expandedStage === i ? s.color : "rgba(245,240,232,0.4)", letterSpacing: "0.5px" }}>{s.num}</div>
-                  <div style={{ fontSize: "11px", fontWeight: 600, color: expandedStage === i ? "#F5F0E8" : "rgba(245,240,232,0.35)", marginTop: "2px" }}>{s.title}</div>
+                  <div style={{ fontSize: "10px", fontWeight: 800, color: s.color, letterSpacing: "0.5px" }}>{s.num}</div>
+                  <div style={{ fontSize: "11px", fontWeight: 600, color: "#F5F0E8", marginTop: "2px" }}>{s.title}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* EXPANDED STAGE DETAIL */}
-          {journeyStages.map((stage, si) => si === expandedStage && (
+          {journeyStages.map((stage, si) => (
             <div key={si} style={{ ...card, borderLeft: `3px solid ${stage.color}`, background: stage.bgColor }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px", flexWrap: "wrap" }}>
                 <div style={{ fontSize: "32px" }}>{stage.icon}</div>
@@ -417,10 +432,10 @@ export default function App() {
               <span>🏷 Cold leads: 6-12 tuần total</span>
             </div>
           </div>
-        </div>)}
+        </section>
 
         {/* ===== CONSUMER DEEP DIVE ===== */}
-        {active === "consumer" && (<div>
+        <section id="consumer" style={sectionWrap}>
           <h2 style={h2}>Consumer Deep Dive</h2>
 
           {/* INFO SOURCES */}
@@ -531,10 +546,10 @@ export default function App() {
               </div>
             </div>
           </div>
-        </div>)}
+        </section>
 
         {/* ===== STRATEGY ===== */}
-        {active === "strategy" && (<div>
+        <section id="strategy" style={sectionWrap}>
           <h2 style={h2}>Tóm Tắt Chiến Lược</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "24px" }}>
             <div style={card}><h3 style={{ ...h3, color: "#2E7D32" }}>✅ Điểm mạnh CaliSolar</h3><ul style={{ margin: 0, paddingLeft: "16px", ...body }}><li>Mô hình dealer nhẹ vốn, dễ scale</li><li>Financing đa dạng (PPA, Loan, Purchase)</li><li>24/7 monitoring, 100% transferable</li><li>Một đầu mối liên lạc</li><li>$0 down for qualified homeowners</li></ul></div>
@@ -563,7 +578,7 @@ export default function App() {
           <div style={{ marginTop: "32px", padding: "16px 0", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "11px", color: "rgba(245,240,232,0.25)" }}>
             Nguồn: SEIA/Wood Mackenzie 2025 YiR, McKinsey, EnergySage H2 2025, OhmSnap CA Market Data, SCE Rate Advisory, CPUC, SurgePV, Bodhi Solar, WebFX, Solar.com. Phân tích cho CaliSolar — Tháng 6/2026.
           </div>
-        </div>)}
+        </section>
 
       </div>
     </div>

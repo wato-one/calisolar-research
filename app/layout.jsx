@@ -5,7 +5,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="vi">
+    <html lang="vi" style={{ scrollBehavior: "smooth" }}>
       <body style={{ margin: 0, padding: 0 }}>{children}</body>
     </html>
   );
