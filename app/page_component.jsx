@@ -97,6 +97,189 @@ function ThreatDots({ level }) {
   return <div style={{ display: "flex", gap: "3px" }}>{[1,2,3,4,5].map(i => <div key={i} style={{ width: "8px", height: "8px", borderRadius: "50%", background: i <= level ? (level >= 4 ? "#C62828" : "#E65100") : "rgba(150,150,150,0.15)" }} />)}</div>;
 }
 
+function TermGlossary({ title = "Thuật ngữ trong section này", terms }) {
+  return (
+    <div style={{
+      background: "rgba(244,166,35,0.06)",
+      border: "1px solid rgba(244,166,35,0.22)",
+      borderRadius: "8px",
+      padding: "20px 24px",
+      marginBottom: "24px",
+    }}>
+      <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#F4A623", marginBottom: "14px" }}>{title}</div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px 24px" }}>
+        {terms.map((t, i) => (
+          <div key={i}>
+            <div>
+              <span style={{ fontSize: "13px", fontWeight: 700, color: "#F4A623" }}>{t.term}</span>
+              {t.en && <span style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginLeft: "6px" }}>{t.en}</span>}
+            </div>
+            <p style={{ fontSize: "13px", color: "rgba(245,240,232,0.62)", lineHeight: 1.65, margin: "4px 0 0" }}>{t.def}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const glossaryBySection = {
+  overview: [
+    { term: "Authorized dealer", en: "Đại lý ủy quyền", def: "CaliSolar bán & tư vấn dưới thương hiệu nhà sản xuất/đối tác, không nhất thiết tự thi công — khác installer có license C-10." },
+    { term: "Residential Solar", en: "Solar dân dụng", def: "Hệ điện mặt trời lắp mái nhà ở; báo cáo dự báo residential CA giảm ~19% năm 2026 sau ITC hết hạn." },
+    { term: "Homeowner", en: "Chủ nhà", def: "Khách hàng cuối sở hữu nhà — đối tượng mua solar residential tại California." },
+    { term: "Dealer / Installer", en: "Đại lý / Lắp đặt", def: "Dealer: bán & financing. Installer: thi công (cần C-10). CaliSolar = dealer; Simple Power = EPC thi công." },
+    { term: "EPC", en: "Engineering, Procurement, Construction", def: "Thiết kế, mua panel/inverter, lắp đặt. CaliSolar dùng Simple Power (CA C-10 #1,111,652)." },
+    { term: "C-10", en: "Electrical Contractor License", def: "Giấy phép thầu điện CA (CSLB) — bắt buộc nếu công ty tự lắp solar." },
+    { term: "Financing", en: "Tài trợ", def: "PPA, loan, cash, TPO — hạ rào chi phí ban đầu cho homeowner." },
+    { term: "O&M", en: "Operations & Maintenance", def: "Vận hành & bảo trì sau lắp: monitoring, sửa chữa, thay thiết bị." },
+    { term: "$/W", en: "Dollar per Watt", def: "Giá lắp đặt trên watt-peak. CA ~$2.39/W, thấp ~20% so với national ~$3.00/W." },
+    { term: "kWh", en: "Kilowatt-hour", def: "Đơn vị điện năng tiêu thụ; SCE ~34.5¢/kWh (2024), tăng ~83% trong 10 năm." },
+    { term: "SCE", en: "Southern California Edison", def: "Utility phục vụ Southern CA — hóa đơn & biểu giá ảnh hưởng trực tiếp ROI solar." },
+  ],
+  pestel: [
+    { term: "PESTEL", en: "P·E·S·T·E·L", def: "Khung phân tích vĩ mô: Political, Economic, Social, Technological, Environmental, Legal." },
+    { term: "ITC", en: "Investment Tax Credit", def: "Tín dụng thuế liên bang năng lượng sạch. Section 25D residential 30% hết 31/12/2025; ITC thương mại (TPO/PPA) còn đến ~2027." },
+    { term: "Section 25D", en: "Residential ITC", def: "Điều khoản ITC cho homeowner sở hữu hệ thống — đã hết hạn, làm ROI mua outright yếu hơn." },
+    { term: "NEM 3.0", en: "Net Billing Tariff", def: "Từ 4/2023: điện dư export ~$0.04–0.10/kWh; khác NEM 2.0 (offset gần 1:1)." },
+    { term: "NEM 2.0", en: "Net Energy Metering", def: "Chính sách cũ: credit điện dư gần tương đương giá mua — đã thay bằng NEM 3.0 tại CA." },
+    { term: "SEIA", en: "Solar Energy Industries Association", def: "Hiệp hội solar Mỹ; dự báo residential sụt 19% năm 2026, lobby ITC & CPUC." },
+    { term: "CPUC", en: "CA Public Utilities Commission", def: "Điều tiết utility; quyết định NEM, fixed charge, biểu giá." },
+    { term: "Fixed Charge", en: "Phí cố định", def: "Phí hàng tháng trên hóa đơn điện (đề xuất CPUC) — giảm incentive đi solar mới." },
+    { term: "PPA", en: "Power Purchase Agreement", def: "Khách trả theo kWh điện từ hệ thống do công ty sở hữu; thường $0 down." },
+    { term: "TPO", en: "Third-Party Ownership", def: "Bên thứ ba sở hữu hệ thống — hưởng ITC thương mại, khách không cần tax credit." },
+    { term: "APR", en: "Annual Percentage Rate", def: "Lãi suất vay solar ~5.5% — ảnh hưởng monthly payment & close rate." },
+    { term: "SCE", en: "Southern California Edison", def: "Utility trong phân tích giá điện & wildfire mitigation." },
+    { term: "TOU", en: "Time-of-Use", def: "Giá điện theo giờ; peak 4–9 PM có thể ~70¢/kWh mùa hè SCE." },
+    { term: "kWh", en: "Kilowatt-hour", def: "Đơn vị đo điện năng trên hóa đơn và khi export solar dư." },
+    { term: "Wholesale", en: "Giá điện bán buôn", def: "Giá điện lưới bán buôn — tăng ~23% do nhu cầu data center, đẩy giá retail." },
+    { term: "YoY", en: "Year over Year", def: "So sánh cùng kỳ năm trước; pin residential +51% YoY (2025)." },
+    { term: "TOPCon / HJT", en: "Công nghệ cell", def: "Kiểu pin thế hệ mới thay PERC — hiệu suất cao, ít panel hơn trên mái nhỏ." },
+    { term: "PERC", en: "Passivated Emitter Rear Cell", def: "Công nghệ cell phổ biến thế hệ trước, đang được TOPCon/HJT thay thế." },
+    { term: "VPP", en: "Virtual Power Plant", def: "Mạng pin nhà phối hợp bán điện giờ cao điểm; CA mục tiêu 52,000 MW storage 2045." },
+    { term: "MW", en: "Megawatt", def: "1 MW = 1 triệu watt; đơn vị quy mô lưu trữ / công suất lưới." },
+    { term: "C-10 / C-46", en: "CSLB licenses", def: "C-10: thầu điện. C-46: thầu solar — rào cản cho đối thủ tự lắp; dealer không bắt buộc." },
+    { term: "Solar Mandate", en: "Bắt buộc solar nhà mới", def: "CA yêu cầu solar trên nhà mới từ 2020; Title 24/2025 khuyến khích thêm battery." },
+    { term: "Dealer", en: "Đại lý", def: "Mô hình CaliSolar — rào cản vào ngành thấp hơn installer có license." },
+  ],
+  porter: [
+    { term: "Porter's Five Forces", en: "5 lực lượng Porter", def: "Khung đánh giá áp lực cạnh tranh: nội bộ ngành, đối thủ mới, nhà cung cấp, khách hàng, thay thế." },
+    { term: "ITC", en: "Investment Tax Credit", def: "Hết hạn residential → consolidation; TPO/PPA vẫn hưởng ITC thương mại." },
+    { term: "Consolidation", en: "Tập trung ngành", def: "Công ty nhỏ rời thị trường hoặc M&A khi margin bị ép & incentive giảm." },
+    { term: "Dealer vs Installer", en: "Đại lý vs Lắp đặt", def: "Dealer: không cần C-10, rào cản thấp. Installer: cần license, rào cản cao." },
+    { term: "C-10", en: "Electrical license", def: "License CA cho công ty tự thi công — rào cản đối thủ mới (lực lượng 2)." },
+    { term: "EPC", en: "Engineering, Procurement, Construction", def: "Đối tác thi công; phụ thuộc 1 EPC → quyền lực nhà cung cấp cao (lực lượng 3)." },
+    { term: "Panel / Inverter", en: "Thiết bị chính", def: "Nhiều nhà cung cấp → quyền lực supplier thấp với thiết bị; cao hơn với lao động có license." },
+    { term: "Close rate", en: "Tỷ lệ chốt", def: "Tỷ lệ lead thành hợp đồng — financing partner ảnh hưởng trực tiếp." },
+    { term: "Switching cost", en: "Chi phí chuyển đổi", def: "= 0 trước ký hợp đồng → quyền lực khách hàng cao (lực lượng 4)." },
+    { term: "EnergySage", en: "Marketplace", def: "So sánh quotes online; engagement +205% — minh bạch giá, ép margin." },
+    { term: "SolarReviews", en: "Review platform", def: "Trang đánh giá installer — cùng EnergySage tăng áp lực minh bạch giá." },
+    { term: "National avg", en: "Trung bình quốc gia", def: "Giá $/W trung bình Mỹ ~$3.00; CA ~$2.39 do cạnh tranh địa phương." },
+    { term: "Community solar", en: "Solar cộng đồng", def: "Thuê quota từ farm solar — thay thế yếu cho chủ nhà có mái riêng tại CA." },
+    { term: "HVAC / Roofing", en: "Ngành lân cận", def: "Đối thủ mới mở rộng sang solar — rào cản trung bình-cao tùy license." },
+    { term: "Post-ITC", en: "Sau ITC", def: "Giai đoạn sau khi residential ITC hết — khách mặc cả mạnh, một số đối thủ rời ngành." },
+  ],
+  lifecycle: [
+    { term: "Industry Lifecycle", en: "Vòng đời ngành", def: "Introduction → Growth → Maturity → Declation/Consolidation." },
+    { term: "Mature Growth", en: "Tăng trưởng trưởng thành", def: "Giai đoạn hiện tại: thị trường lớn nhưng tốc độ chậm, margin thấp." },
+    { term: "Turbulent Consolidation", en: "Hợp nhất đầy biến động", def: "Sụt 19% năm 2026 rồi phục hồi — công ty yếu rời, công ty mạnh gom thị phần." },
+    { term: "Headwinds", en: "Gió ngược", def: "ITC hết, NEM 3.0, thuế quan, fixed charge CPUC, residential -19% (2026)." },
+    { term: "Tailwinds", en: "Gió thuận", def: "Giá điện +83%/10 năm, TPO/PPA + ITC thương mại, battery +51% YoY, +7%/năm từ 2027." },
+    { term: "ITC", en: "Investment Tax Credit", def: "Hết residential → ROI yếu; ITC thương mại vẫn hỗ trợ TPO/PPA." },
+    { term: "NEM 3.0", en: "Net Billing", def: "Giảm giá trị export điện dư — headwind cho chỉ lắp panel không pin." },
+    { term: "CPUC / Fixed charge", en: "Phí cố định", def: "Phí hàng tháng mới — headwind cho economics solar mới." },
+    { term: "TPO / PPA", en: "Sở hữu bên thứ ba", def: "Tailwind vì vẫn hưởng ITC thương mại đến ~2027." },
+    { term: "Residential solar", en: "Solar dân dụng", def: "Phân khúc báo cáo giảm 19% năm 2026 (SEIA/Wood Mackenzie)." },
+    { term: "ROI", en: "Return on Investment", def: "Lợi tức đầu tư — yếu hơn post-ITC nếu mua outright không có tax credit." },
+    { term: "Battery storage", en: "Pin lưu trữ", def: "Tăng 51% YoY — tailwind cho solar+battery bundle." },
+    { term: "Consolidation", en: "Tập trung", def: "Ít đối thủ hơn sau 2026 — cơ hội cho công ty sống sót." },
+    { term: "GWdc", en: "Gigawatt DC", def: "Dự báo thêm 60+ GWdc lắp đặt solar Mỹ 2026–2036." },
+    { term: "YoY", en: "Year over Year", def: "So sánh theo năm — dùng trong thống kê pin & thị trường." },
+  ],
+  competitors: [
+    { term: "National installer", en: "Công ty quốc gia", def: "Sunrun, Momentum — scale, financing, marketing toàn Mỹ." },
+    { term: "Regional installer", en: "Công ty khu vực", def: "NRG Clean Power, Stellar, LA Solar — mạnh uy tín địa phương CA/SD/LA." },
+    { term: "TPO / PPA", en: "Cho thuê / mua điện", def: "Khách không sở hữu hệ thống; Sunrun dẫn đầu mô hình này." },
+    { term: "ITC", en: "Investment Tax Credit", def: "Đối thủ bị phàn nàn misrepresenting ITC (Momentum) — rủi uy tín ngành." },
+    { term: "Threat level", en: "Mức đe dọa (1–5)", def: "Đánh giá nội bộ mức độ ảnh hưởng tới CaliSolar." },
+    { term: "Installer", en: "Nhà lắp đặt", def: "Đơn vị thi công & bán trực tiếp — khác dealer như CaliSolar." },
+    { term: "Warranty", en: "Bảo hành", def: "25-year panel, 20-year workmanship — tiêu chí so sánh đối thủ." },
+    { term: "Tesla-certified", en: "Chứng nhận Tesla", def: "LA Solar Group — lắp Powerwall/panel Tesla." },
+    { term: "Overpromising", en: "Hứa quá mức", def: "Phóng đại tiết kiệm/ITC — điểm yếu LA Solar, Momentum." },
+    { term: "Lease", en: "Thuê hệ thống", def: "Tương tự TPO — không tăng giá trị nhà khi bán (vs solar-owned)." },
+  ],
+  journey: [
+    { term: "Path to Purchase", en: "Hành trình mua", def: "7 giai đoạn: Trigger → Research → Compare → Evaluate → Decide → Install → Advocate." },
+    { term: "Bill Shock", en: "Sốc hóa đơn", def: "Trigger #1 (~45%): hóa đơn SCE $300–500+ mùa hè." },
+    { term: "TOU / Peak rate", en: "Giờ cao điểm", def: "Giá điện peak có thể ~70¢/kWh — thúc đẩy solar + pin." },
+    { term: "PSPS", en: "Public Safety Power Shutoff", def: "Cắt điện phòng cháy rừng — trigger resilience (~20%)." },
+    { term: "ITC", en: "Investment Tax Credit", def: "Tin ITC hết hạn kích hoạt urgency trong giai đoạn Trigger/Research." },
+    { term: "NEM 3.0", en: "Net Billing", def: "Homeowner search & evaluate battery vì export điện dư rẻ." },
+    { term: "SCE", en: "Southern California Edison", def: "Utility trên bill shock và tin tức tăng giá." },
+    { term: "SEO", en: "Search Engine Optimization", def: "Quyết định ai xuất hiện khi Google 'solar cost California'." },
+    { term: "Content marketing", en: "Marketing nội dung", def: "Blog/video giáo dục — quan trọng giai đoạn Research." },
+    { term: "Quote", en: "Báo giá", def: "Homeowner so 3–5 quotes trong giai đoạn Compare (7–21 ngày)." },
+    { term: "EnergySage", en: "Marketplace", def: "So sánh quotes online, giá thường thấp ~20% vs direct." },
+    { term: "SolarReviews", en: "Review site", def: "Đánh giá installer chi tiết — giai đoạn Compare." },
+    { term: "Yelp / BBB", en: "Review & rating", def: "Nền tảng uy tín khi Google 'solar company near me'." },
+    { term: "NABCEP", en: "Certification", def: "Tiêu chí đánh giá installer trong giai đoạn Evaluate." },
+    { term: "ROI", en: "Return on Investment", def: "Projection tiết kiệm phải realistic — tránh overpromise." },
+    { term: "PPA", en: "Power Purchase Agreement", def: "Financing $0 down — quan trọng post-ITC khi Decide." },
+    { term: "Loan", en: "Vay mua hệ thống", def: "Homeowner sở hữu hệ thống; cần terms chấp nhận được." },
+    { term: "PTO", en: "Permission to Operate", def: "Chờ utility bật hệ thống sau lắp — pain point Install (3–12 tuần)." },
+    { term: "WOM / Referral", en: "Truyền miệng", def: "Advocate: review & giới thiệu hàng xóm — conversion cao nhất." },
+    { term: "Close rate", en: "Tỷ lệ chốt", def: "Phụ thuộc financing & trust ở giai đoạn Decide." },
+    { term: "Homeowner", en: "Chủ nhà", def: "Chủ thể toàn bộ hành trình — chủ động đến khi gặp salesperson." },
+  ],
+  consumer: [
+    { term: "Google Business", en: "Hồ sơ Google", def: "Kênh review chính — 50+ reviews ≈ 3x organic leads." },
+    { term: "Yelp", en: "Review platform", def: "Một trong các nền tảng homeowner kiểm tra trước khi ký." },
+    { term: "SolarReviews", en: "Review site", def: "Chuyên solar — trong top nguồn thông tin (rank #2 online reviews)." },
+    { term: "EnergySage", en: "Marketplace", def: "So sánh quotes; không có mặt = mất Smart Investor & Bill Shocked." },
+    { term: "WOM / Referral", en: "Truyền miệng", def: "88% tin ngang referral; referral bắt đầu câu chuyện, Google viết tiếp." },
+    { term: "NEM 3.0", en: "Net Billing", def: "Làm battery gần bắt buộc; export không pin ~$0.04–0.10/kWh." },
+    { term: "ITC", en: "Investment Tax Credit", def: "Post-ITC: PPA/TPO $0 down quan trọng hơn; overpromise ITC gây distrust." },
+    { term: "PPA / TPO", en: "Không sở hữu hệ thống", def: "PPA trả theo kWh; TPO/lease — không tăng giá trị nhà khi bán." },
+    { term: "Loan / Cash", en: "Sở hữu hệ thống", def: "Loan hoặc trả cash — solar-owned, tăng giá nhà ~6.8%." },
+    { term: "Prepaid TPO", en: "Trả trước TPO", def: "Một trong các lựa chọn financing trong decision factors." },
+    { term: "ROI", en: "Return on Investment", def: "Yếu tố #2 quyết định; projection phải realistic." },
+    { term: "NPV", en: "Net Present Value", def: "Smart Investor dùng NPV calculator khi research." },
+    { term: "CSLB", en: "License board", def: "Tra license C-10/C-46 — yếu tố #3 uy tín installer." },
+    { term: "NABCEP", en: "Certification", def: "Chứng chỉ lắp đặt — tiêu chí trust trong Evaluate." },
+    { term: "SGIP", en: "Battery rebate", def: "Chương trình rebate pin CA — giảm $10–15K battery." },
+    { term: "Workmanship warranty", en: "Bảo hành thi công", def: "Thường 10 năm; transferable khi bán nhà." },
+    { term: "Solar-owned", en: "Sở hữu hệ thống", def: "Tăng ~6.8% giá nhà; khác lease/TPO." },
+    { term: "Close rate", en: "Tỷ lệ chốt", def: "Công ty offer nhiều financing options → close rate cao hơn." },
+    { term: "PTO", en: "Permission to Operate", def: "Cửa sổ 7 ngày sau PTO — thời điểm tốt nhất xin review." },
+    { term: "TOU", en: "Time-of-Use", def: "Usage shifting: dùng máy ban ngày, tránh peak 4–9 PM." },
+    { term: "Enphase / SolarEdge / Tesla", en: "Monitoring brands", def: "App theo dõi production — thói quen sau lắp đặt." },
+    { term: "EV", en: "Electric Vehicle", def: "Green Conscious segment — sạc xe, whole-home electrification." },
+    { term: "CRM", en: "Customer Relationship Management", def: "Door-to-door 2026 tích hợp CRM, data-driven canvassing." },
+    { term: "Cost-per-lead", en: "Chi phí mỗi lead", def: "Facebook/IG ads: CPL cao nhưng volume lớn." },
+    { term: "PG&E / SCE", en: "Utilities", def: "Utility không endorse installer nhưng homeowner tra rate info." },
+    { term: "Social proof", en: "Bằng chứng xã hội", def: "Bill Shocked segment cần proof trước khi tin sales." },
+    { term: "Overpromise", en: "Hứa quá mức", def: "#1 lý do bad reviews & distrust toàn ngành." },
+  ],
+  strategy: [
+    { term: "Social proof", en: "Bằng chứng xã hội", def: "Mục tiêu 50+ Google reviews, rating 4.5+, respond trong 24h." },
+    { term: "Organic leads", en: "Lead tự nhiên", def: "Khách đến từ SEO/review — 50+ reviews ≈ 3x organic." },
+    { term: "EnergySage", en: "Marketplace", def: "Action item: đăng ký — 45% segment Compare dùng platform." },
+    { term: "ITC", en: "Investment Tax Credit", def: "TPO vẫn hưởng ITC thương mại đến 2027 — messaging 'không cần tax credit'." },
+    { term: "TPO / PPA", en: "Sở hữu bên thứ ba", def: "Post-ITC messaging chính cho homeowner không đủ tax liability." },
+    { term: "NEM 3.0", en: "Net Billing", def: "Bundling solar+battery: export vs self-use peak 70¢/kWh." },
+    { term: "SCE", en: "Southern California Edison", def: "Messaging giá điện +83%/10 năm thay vì chỉ ITC." },
+    { term: "ROI", en: "Return on Investment", def: "Xoay messaging quanh lock giá điện, không overpromise ITC." },
+    { term: "Bundling", en: "Solar + Battery", def: "Educate gap 73% muốn pin vs 40% mua." },
+    { term: "SGIP", en: "Battery rebate", def: "Hỗ trợ giảm chi phí pin trong gói bundling." },
+    { term: "PTO", en: "Permission to Operate", def: "Xin review trong 7 ngày đầu sau PTO." },
+    { term: "Referral program", en: "Chương trình giới thiệu", def: "$250–500/referral; kết hợp realtor & roofer." },
+    { term: "WOM", en: "Word of Mouth", def: "Referral = conversion rate cao nhất — ưu tiên sau trải nghiệm tốt." },
+    { term: "EPC", en: "Engineering, Procurement, Construction", def: "Phụ thuộc 1 EPC (Simple Power) — rủi ro cần khắc phục." },
+    { term: "Dealer", en: "Mô hình đại lý", def: "Điểm mạnh: nhẹ vốn, scale; financing đa dạng." },
+    { term: "SEO", en: "Search optimization", def: "Điểm yếu hiện tại — cần cải thiện digital presence." },
+    { term: "kWh", en: "Kilowatt-hour", def: "Đơn vị trong messaging export $0.04–0.10 vs self-use peak." },
+  ],
+};
+
 // ---- PATH TO PURCHASE INFOGRAPHIC DATA ----
 const journeyStages = [
   {
@@ -259,6 +442,7 @@ export default function App() {
         {/* ===== OVERVIEW ===== */}
         <section id="overview" style={sectionWrap}>
           <h2 style={h2}>Tổng Quan CaliSolar & Chuỗi Giá Trị</h2>
+          <TermGlossary terms={glossaryBySection.overview} />
           <p style={{ ...body, marginBottom: "24px" }}>CaliSolar hoạt động với mô hình <strong style={{ color: "#F4A623" }}>authorized dealer</strong> — tư vấn, thiết kế, financing, hỗ trợ khách hàng. Lắp đặt do Simple Power (CA C-10 #1,111,652) thực hiện.</p>
           <div style={{ ...card, padding: 0, overflow: "hidden" }}>
             <div style={{ padding: "16px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
@@ -285,6 +469,7 @@ export default function App() {
         {/* ===== PESTEL ===== */}
         <section id="pestel" style={sectionWrap}>
           <h2 style={h2}>Phân Tích PESTEL</h2>
+          <TermGlossary terms={glossaryBySection.pestel} />
           <p style={{ ...body, marginBottom: "24px" }}>6 yếu tố vĩ mô ảnh hưởng ngành solar residential California 2026.</p>
           {pestelData.map((cat, ci) => (
             <div key={ci} style={{ ...card, borderLeft: `3px solid ${cat.color}` }}>
@@ -305,6 +490,7 @@ export default function App() {
         {/* ===== PORTER ===== */}
         <section id="porter" style={sectionWrap}>
           <h2 style={h2}>Porter's Five Forces</h2>
+          <TermGlossary terms={glossaryBySection.porter} />
           <p style={{ ...body, marginBottom: "24px" }}>5 lực lượng cạnh tranh trong ngành solar residential California.</p>
           {porterData.map((f, fi) => (
             <div key={fi} style={{ ...card, borderLeft: `3px solid ${f.color}` }}>
@@ -320,6 +506,7 @@ export default function App() {
         {/* ===== LIFECYCLE ===== */}
         <section id="lifecycle" style={sectionWrap}>
           <h2 style={h2}>Giai Đoạn Vòng Đời Ngành</h2>
+          <TermGlossary terms={glossaryBySection.lifecycle} />
           <div style={{ ...card, borderLeft: "3px solid #F4A623" }}>
             <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#F4A623", marginBottom: "8px" }}>Kết luận</div>
             <h3 style={{ ...h3, fontSize: "20px" }}>Mature Growth → Turbulent Consolidation</h3>
@@ -334,6 +521,7 @@ export default function App() {
         {/* ===== COMPETITORS ===== */}
         <section id="competitors" style={sectionWrap}>
           <h2 style={h2}>Đối Thủ Cạnh Tranh</h2>
+          <TermGlossary terms={glossaryBySection.competitors} />
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {competitorData.map((c, ci) => (
               <div key={ci} style={card}>
@@ -353,6 +541,7 @@ export default function App() {
         {/* ===== PATH TO PURCHASE INFOGRAPHIC ===== */}
         <section id="journey" style={sectionWrap}>
           <h2 style={h2}>Path to Purchase</h2>
+          <TermGlossary terms={glossaryBySection.journey} />
           <p style={{ ...body, marginBottom: "8px" }}>Hành trình 7 giai đoạn từ kích hoạt nhu cầu đến trở thành người giới thiệu. Tổng timeline: 2-8 tuần (Trigger → Decision) + 3-12 tuần (Install → PTO).</p>
           <p style={{ fontSize: "12px", color: "rgba(245,240,232,0.35)", marginBottom: "32px" }}>Cuộn xuống để xem chi tiết từng giai đoạn — hoặc dùng menu phía trên để nhảy nhanh.</p>
 
@@ -437,6 +626,7 @@ export default function App() {
         {/* ===== CONSUMER DEEP DIVE ===== */}
         <section id="consumer" style={sectionWrap}>
           <h2 style={h2}>Consumer Deep Dive</h2>
+          <TermGlossary terms={glossaryBySection.consumer} />
 
           {/* INFO SOURCES */}
           <h3 style={{ ...h3, marginTop: "8px" }}>Nguồn thông tin tham khảo (xếp hạng)</h3>
@@ -551,6 +741,7 @@ export default function App() {
         {/* ===== STRATEGY ===== */}
         <section id="strategy" style={sectionWrap}>
           <h2 style={h2}>Tóm Tắt Chiến Lược</h2>
+          <TermGlossary terms={glossaryBySection.strategy} />
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "24px" }}>
             <div style={card}><h3 style={{ ...h3, color: "#2E7D32" }}>✅ Điểm mạnh CaliSolar</h3><ul style={{ margin: 0, paddingLeft: "16px", ...body }}><li>Mô hình dealer nhẹ vốn, dễ scale</li><li>Financing đa dạng (PPA, Loan, Purchase)</li><li>24/7 monitoring, 100% transferable</li><li>Một đầu mối liên lạc</li><li>$0 down for qualified homeowners</li></ul></div>
             <div style={card}><h3 style={{ ...h3, color: "#C62828" }}>⚠️ Cần khắc phục</h3><ul style={{ margin: 0, paddingLeft: "16px", ...body }}><li>Quy mô nhỏ (132 installs) → thiếu social proof</li><li>Phụ thuộc 1 EPC (Simple Power)</li><li>Digital presence / SEO yếu</li><li>Chưa có trên EnergySage marketplace</li><li>Review online ít</li></ul></div>
