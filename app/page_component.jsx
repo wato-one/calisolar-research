@@ -1,6 +1,89 @@
 "use client";
 import { useState, useEffect } from "react";
 import { masterGlossary } from "./master-glossary";
+import { reportSources, caMarketSizing } from "./report-sources";
+
+const sourceById = Object.fromEntries(reportSources.map((s) => [s.id, s]));
+
+function SourceRefs({ ids }) {
+  if (!ids?.length) return null;
+  return (
+    <div style={{ marginTop: "10px", fontSize: "11px", color: "rgba(245,240,232,0.38)", lineHeight: 1.6 }}>
+      <span style={{ fontWeight: 700, letterSpacing: "0.3px" }}>Nguồn: </span>
+      {ids.map((id, i) => {
+        const s = sourceById[id];
+        if (!s) return null;
+        return (
+          <span key={id}>
+            {i > 0 && " · "}
+            {s.url ? (
+              <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: "#F4A623", textDecoration: "none" }}>
+                {s.label} ({s.accessed})
+              </a>
+            ) : (
+              <span>{s.label} — {s.note || s.title}</span>
+            )}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function SectionSources({ ids, title = "Nguồn tham khảo — phần này" }) {
+  const items = ids.map((id) => sourceById[id]).filter(Boolean);
+  if (!items.length) return null;
+  return (
+    <div style={{
+      marginTop: "20px",
+      padding: "14px 18px",
+      borderRadius: "6px",
+      background: "rgba(255,255,255,0.02)",
+      border: "1px solid rgba(255,255,255,0.05)",
+    }}>
+      <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase", color: "rgba(245,240,232,0.35)", marginBottom: "8px" }}>{title}</div>
+      <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: "rgba(245,240,232,0.5)", lineHeight: 1.65 }}>
+        {items.map((s) => (
+          <li key={s.id} style={{ marginBottom: "4px" }}>
+            {s.url ? <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: "#F4A623", textDecoration: "none" }}>{s.title}</a> : s.title}
+            <span style={{ color: "rgba(245,240,232,0.3)" }}> — {s.label}, truy cập {s.accessed}</span>
+            {s.note && <span style={{ display: "block", fontSize: "11px", marginTop: "2px" }}>{s.note}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function CaMarketSizingPanel({ card, h3, body }) {
+  const rows = [
+    ["Tổng housing units CA", caMarketSizing.housingUnits],
+    ["Hộ owner-occupied", caMarketSizing.ownerOccupied],
+    ["Hộ mái phù hợp rooftop solar", caMarketSizing.rooftopSuitable],
+    ["Hộ đã có solar (interconnect)", caMarketSizing.withSolar],
+    ["TAM còn lại (chưa lắp)", caMarketSizing.remainingTam],
+    ["Residential Mỹ (2025)", caMarketSizing.annualResidentialMW],
+    ["Dự báo residential Mỹ 2026", caMarketSizing.forecast2026],
+  ];
+  return (
+    <div style={{ ...card, borderLeft: "3px solid #1565C0", marginBottom: "28px" }}>
+      <h3 style={{ ...h3, fontSize: "16px" }}>Quy mô thị trường California ({caMarketSizing.asOf})</h3>
+      <p style={{ ...body, marginBottom: "16px" }}>
+        Các con số dưới đây dùng để ước lượng <strong style={{ color: "#F4A623" }}>quy mô phân khúc</strong> (hộ/thị trường), không phải % doanh thu CaliSolar.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "10px" }}>
+        {rows.map(([label, d]) => (
+          <div key={label} style={{ padding: "12px 14px", borderRadius: "6px", background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.04)" }}>
+            <div style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginBottom: "4px" }}>{label}</div>
+            <div style={{ fontSize: "15px", fontWeight: 700, color: "#F5F0E8" }}>{d.value}</div>
+            <div style={{ fontSize: "11px", color: "rgba(245,240,232,0.45)", marginTop: "4px", lineHeight: 1.5 }}>{d.note}</div>
+          </div>
+        ))}
+      </div>
+      <SourceRefs ids={["census-ca", "ca-dgstats", "seia-smi-2025"]} />
+    </div>
+  );
+}
 
 const sections = [
   { id: "overview", label: "Tổng Quan" },
@@ -16,59 +99,65 @@ const sections = [
 const pestelData = [
   {
     letter: "P", title: "Political", color: "#C62828",
+    sourceIds: ["seia-smi-2025", "irs-itc", "cpuc-nbt"],
     items: [
-      { headline: "ITC Section 25D hết hạn 31/12/2025", detail: "Tín dụng thuế liên bang 30% cho solar dân dụng đã kết thúc. SEIA dự báo thị trường residential solar sụt giảm 19% trong 2026.", impact: "critical" },
-      { headline: "Thuế quan Trump 2025-2026", detail: "Thuế suất lên đến 3,500% nhắm vào nhà sản xuất Đông Nam Á. Thuế thép/nhôm tăng gấp đôi lên 50% từ tháng 6/2025, ảnh hưởng đến giá racking và mounting.", impact: "high" },
-      { headline: "NEM 3.0 (Net Billing Tariff)", detail: "Từ tháng 4/2023, giá mua điện dư từ solar xuống rất thấp ($0.04–0.10/kWh), buộc homeowner phải kèm pin lưu trữ để maximize giá trị.", impact: "high" },
+      { headline: "ITC Section 25D hết hạn 31/12/2025", detail: "OBBBA xác nhận loại bỏ ITC sở hữu residential. Năm 2025 lắp 4,647 MWdc (−2% YoY). SEIA/Wood Mackenzie dự báo residential Mỹ −19% năm 2026.", impact: "critical", sourceIds: ["seia-smi-2025", "irs-itc"] },
+      { headline: "Thuế & chi phí thiết bị 2025–2026", detail: "SEIA 2025 YiR: thép/đồng/nhôm +35% sau Section 232 50%; chi phí thiết bị cơ điện/cấu trúc thương mại +60% Q4/2025. Áp lực giá module và BOS vẫn là headwind cho margin installer.", impact: "high", sourceIds: ["seia-smi-2025"] },
+      { headline: "NEM 3.0 (Net Billing Tariff)", detail: "Hiệu lực từ 4/2023 tại IOU CA. Export điện dư theo giờ, thường thấp hơn nhiều so với giá mua lưới — thúc đẩy self-consumption + pin.", impact: "high", sourceIds: ["cpuc-nbt", "sce-tou"] },
     ],
   },
   {
     letter: "E", title: "Economic", color: "#1565C0",
+    sourceIds: ["sce-rates", "sce-tou", "energysage-ca", "seia-smi-2025"],
     items: [
-      { headline: "Giá điện tăng 83% trong 10 năm", detail: "SCE tăng từ ~18.9¢/kWh (2014) lên ~34.5¢/kWh (2024), gấp đôi mức trung bình quốc gia. Dự kiến tăng thêm 12.9% năm 2026.", impact: "opportunity" },
-      { headline: "Giá lắp đặt California: $2.39/W", detail: "Thấp hơn 20% so với mức trung bình quốc gia $3.00/W. Cạnh tranh installer đã bóp nghẹt biên lợi nhuận. Chi phí lao động vẫn khó giảm.", impact: "high" },
-      { headline: "Lãi suất vay ~5.5% APR", detail: "Chi phí financing là rào cản. Mô hình PPA và TPO (bên thứ ba sở hữu) có lợi thế — vẫn được hưởng ITC thương mại đến 2027.", impact: "high" },
+      { headline: "Giá điện SCE & TOU peak", detail: "Bình quân residential SCE ~34.5¢/kWh (Rate Advisory 6/2026); điều chỉnh 1/2026 giảm ~5% và 6/2026 giảm nhẹ. Xu hướng dài hạn vẫn cao; TOU-D on-peak summer weekdays ~58¢/kWh (4–9 PM) — đây là đòn bẩy sales thực tế hơn chỉ nhìn average rate.", impact: "opportunity", sourceIds: ["sce-rates", "sce-tou"] },
+      { headline: "Giá lắp California: ~$2.53/W", detail: "EnergySage (6/2026): ~$2.53/W cho hệ 8.7 kW (~$22,018 trước incentive). SEIA Q4/2025: bình quân residential Mỹ $3.39/W — CA vẫn rẻ hơn nhờ cạnh tranh dày.", impact: "high", sourceIds: ["energysage-ca", "seia-smi-2025"] },
+      { headline: "Financing & TPO sau ITC", detail: "Vay solar phụ thuộc APR thị trường (~5–7% tùy tín dụng). TPO/PPA vẫn dùng ITC thương mại + safe harbor — SEIA: hoạt động safe harbor hỗ trợ qualify ITC TPO đến giữa 2030.", impact: "high", sourceIds: ["seia-smi-2025"] },
     ],
   },
   {
     letter: "S", title: "Social", color: "#2E7D32",
+    sourceIds: ["brightlocal", "energysage-marketplace", "mckinsey-solar"],
     items: [
-      { headline: "Top 3 ưu tiên khi mua solar", detail: "(1) Chi phí ban đầu, (2) Tiết kiệm dài hạn, (3) Trình độ installer — cao hơn cả ưu đãi chính phủ và tác động môi trường.", impact: "insight" },
-      { headline: "Tâm lý 'giành lại quyền kiểm soát'", detail: "Homeowner bất mãn với hóa đơn tăng. AI data centers đẩy nhu cầu → giá wholesale tăng 23%. Homeowner tìm cách 'cắt dây' khỏi rủi ro.", impact: "opportunity" },
-      { headline: "88% tin review online ngang referral", detail: "Công ty có 50+ reviews nhận gấp 3x organic leads. Review dưới 30 ngày = 'active business', trên 90 ngày = 'có thể đóng cửa'.", impact: "insight" },
+      { headline: "Top 3 ưu tiên khi mua solar", detail: "(1) Chi phí ban đầu / monthly payment, (2) Tiết kiệm dài hạn đáng tin, (3) Uy tín installer — thường quan trọng hơn slogan môi trường (tổng hợp khảo sát ngành & sales insight CA).", impact: "insight", sourceIds: ["mckinsey-solar"] },
+      { headline: "Tâm lý 'kiểm soát hóa đơn'", detail: "Bill shock SCE + PSPS thúc đẩy tìm hiểu solar/battery. Chi phí hạ tầng lưới và wildfire mitigation vẫn được phản ánh qua biểu giá dài hạn dù có kỳ điều chỉnh giảm ngắn hạn.", impact: "opportunity", sourceIds: ["sce-rates"] },
+      { headline: "Review online = cửa vào trust", detail: "BrightLocal: đa số người tiêu dùng đọc review trước khi mua dịch vụ local (mức ~80–90% tùy năm khảo sát). Mục tiêu vận hành: 50+ review Google, phản hồi trong 24h — benchmark ngành, chưa phải số liệu bắt buộc.", impact: "insight", sourceIds: ["brightlocal", "solarreviews"] },
     ],
   },
   {
     letter: "T", title: "Technological", color: "#6A1B9A",
+    sourceIds: ["seia-smi-2025", "cpuc-nbt", "ca-energy-2045"],
     items: [
-      { headline: "Solar + Storage là tiêu chuẩn mới", detail: "Pin residential tăng 51% YoY (2025). 73% homeowner quan tâm battery nhưng chỉ 40% thực sự mua → gap lớn cần educate.", impact: "critical" },
-      { headline: "Panel hiệu suất 450W+ phổ biến", detail: "TOPCon và HJT thay thế PERC. Cần ít panel hơn, phù hợp mái nhỏ.", impact: "opportunity" },
-      { headline: "Virtual Power Plant (VPP)", detail: "Homeowner bán điện từ pin vào lưới trong giờ cao điểm, tạo nguồn thu mới. CA mục tiêu 52,000 MW lưu trữ vào 2045.", impact: "opportunity" },
+      { headline: "Solar + Storage", detail: "2025: solar + storage = 79% capacity mới trên lưới Mỹ. NEM 3.0 làm pin gần như phần cốt lõi proposal CA. Khảo sát ngành: ~73% quan tâm pin, ~40% chốt mua — gap educate/financing.", impact: "critical", sourceIds: ["seia-smi-2025", "cpuc-nbt"] },
+      { headline: "Module 450W+ & TOPCon/HJT", detail: "Module wattage cao giúp giảm footprint mái — quan trọng nhà CA diện tích vừa. Giá module Q4/2025 giảm ~10% YoY (SEIA) nhưng BOS/vật liệu kim loại tăng.", impact: "opportunity", sourceIds: ["seia-smi-2025"] },
+      { headline: "VPP & mục tiêu lưu trữ CA", detail: "Chương trình VPP utility (vd. SCE) + mục tiêu quy hoạch năng lượng CA hướng tới hàng chục nghìn MW storage vào 2045.", impact: "opportunity", sourceIds: ["ca-energy-2045", "sce-rates"] },
     ],
   },
   {
     letter: "E", title: "Environmental", color: "#00695C",
+    sourceIds: ["ca-energy-2045", "seia-5m"],
     items: [
-      { headline: "Mục tiêu 100% sạch 2045", detail: "CA dẫn đầu chính sách năng lượng tái tạo. Solar đã đủ cung cấp cho 14.6 triệu ngôi nhà.", impact: "opportunity" },
-      { headline: "Cháy rừng & mất điện", detail: "Nhu cầu backup power tăng mạnh. SCE chi hàng tỷ USD wildfire mitigation — chuyển vào hóa đơn khách hàng.", impact: "opportunity" },
+      { headline: "100% clean electricity 2045", detail: "California tiếp tục chính sách khí hậu dẫn đầu. Solar đã là nguồn điện chủ lực — SEIA: ~13.9 triệu hộ tương đương từ capacity CA (ước tính ngành).", impact: "opportunity", sourceIds: ["ca-energy-2045", "seia-5m"] },
+      { headline: "Cháy rừng & PSPS", detail: "PSPS và wildfire liability là driver backup power tại SCE/PG&E territory — chi phí mitigation được CPUC phê duyệt qua biểu giá.", impact: "opportunity", sourceIds: ["sce-rates"] },
     ],
   },
   {
     letter: "L", title: "Legal", color: "#E65100",
+    sourceIds: ["cpuc-fixed", "cslb", "title24-solar"],
     items: [
-      { headline: "CPUC Fixed Charge mới", detail: "Phí cố định hàng tháng ảnh hưởng lớn đến incentive khách mới đi solar. SEIA đang đấu tranh chống tăng phí này.", impact: "critical" },
-      { headline: "License C-10/C-46", detail: "Rào cản cho đối thủ mới tự thi công. Mô hình dealer thì rào cản thấp.", impact: "high" },
-      { headline: "Solar Mandate nhà mới", detail: "Nhà mới phải có solar từ 2020. Code 2025 (hiệu lực 1/2026) cập nhật sizing + khuyến khích battery.", impact: "opportunity" },
+      { headline: "CPUC fixed charge & rate design", detail: "Thiết kế biểu giá (fixed charge, baseline) ảnh hưởng ROI solar mới. SEIA và trade groups tiếp tục advocacy — theo dõi quyết định CPUC từng kỳ.", impact: "critical", sourceIds: ["cpuc-fixed", "seia-smi-2025"] },
+      { headline: "License C-10 / C-46", detail: "Installer tự thi công cần license CSLB. Dealer outsource cho EPC có C-10 (mô hình CaliSolar).", impact: "high", sourceIds: ["cslb", "cali-company"] },
+      { headline: "Solar mandate & Title 24", detail: "Nhà mới CA bắt buộc solar từ chu kỳ Title 24 trước; bản cập nhật 2025 nhấn mạnh hiệu năng + khuyến khích pin (hiệu lực theo lịch CEC).", impact: "opportunity", sourceIds: ["title24-solar"] },
     ],
   },
 ];
 
 const porterData = [
-  { force: "Cạnh tranh nội bộ ngành", level: 5, levelLabel: "RẤT CAO", color: "#C62828", points: ["Hàng trăm installer tại California, cạnh tranh khốc liệt", "Giá CA thấp hơn 20% so với national avg do cạnh tranh", "ITC hết hạn → consolidation đang xảy ra", "EnergySage, SolarReviews tạo minh bạch giá"] },
+  { force: "Cạnh tranh nội bộ ngành", level: 5, levelLabel: "RẤT CAO", color: "#C62828", points: ["Hàng trăm installer tại California, cạnh tranh khốc liệt", "CA ~$2.53/W vs ~$3.39/W bình quân Mỹ (Q4/2025, SEIA)", "ITC 25D hết → SEIA dự báo −19% residential 2026, consolidation", "EnergySage, SolarReviews làm minh bạch giá"] },
   { force: "Đe dọa đối thủ mới", level: 3.5, levelLabel: "TB-CAO", color: "#E65100", points: ["Dealer (không cần license): rào cản thấp", "Installer (cần C-10): rào cản cao", "Roofing, HVAC, electrical đang mở rộng sang solar", "Post-ITC: một số rời, nhưng một số mới nhảy vào"] },
   { force: "Quyền lực nhà cung cấp", level: 3, levelLabel: "TRUNG BÌNH", color: "#1565C0", points: ["Panel/inverter: nhiều supplier → quyền lực thấp", "EPC partner: quyền lực cao nếu phụ thuộc 1 EPC", "Financing partners: ảnh hưởng trực tiếp close rate", "Lao động có license: khan hiếm → quyền lực cao"] },
   { force: "Quyền lực khách hàng", level: 4.5, levelLabel: "CAO", color: "#6A1B9A", points: ["Rất nhiều lựa chọn, EnergySage tăng 205% engagement", "Switching cost = 0 trước ký hợp đồng", "Post-ITC: homeowner mặc cả mạnh hơn", "Review online trao quyền thông tin cho khách"] },
-  { force: "Sản phẩm thay thế", level: 2, levelLabel: "THẤP-TB", color: "#2E7D32", points: ["Lưới điện: mặc định nhưng giá tăng 83%/10 năm", "Community solar: cho thuê/mái không phù hợp", "Generator: backup nhưng không tiết kiệm dài hạn", "Hiệu quả năng lượng: bổ sung chứ không thay thế"] },
+  { force: "Sản phẩm thay thế", level: 2, levelLabel: "THẤP-TB", color: "#2E7D32", points: ["Lưới điện: mặc định; SCE TOU on-peak ~58¢ summer", "Community solar: cho thuê/mái không phù hợp", "Generator: backup nhưng không tiết kiệm dài hạn", "Hiệu quả năng lượng: bổ sung chứ không thay thế"] },
 ];
 
 const competitorData = [
@@ -148,8 +237,8 @@ const sectionHints = {
   overview: [
     { term: "Authorized dealer", def: "CaliSolar bán & tư vấn, Simple Power (C-10) lắp đặt." },
     { term: "EPC", def: "Đối tác thi công — thiết kế, mua thiết bị, lắp hệ thống." },
-    { term: "$/W", def: "Giá lắp ~$2.39/W tại CA." },
-    { term: "SCE", def: "Utility Southern CA — ~34.5¢/kWh, +83%/10 năm." },
+    { term: "$/W", def: "Giá lắp ~$2.53/W tại CA (EnergySage 6/2026)." },
+    { term: "SCE", def: "Utility Southern CA — avg ~34.5¢/kWh; TOU peak ~58¢ (2026 advisory)." },
   ],
   pestel: [
     { term: "PESTEL", def: "Khung phân tích 6 yếu tố vĩ mô." },
@@ -178,7 +267,7 @@ const sectionHints = {
   ],
   consumer: [
     { term: "EnergySage / SolarReviews", def: "Kênh research & so sánh giá." },
-    { term: "PPA / TPO vs Loan", def: "Không sở hữu vs solar-owned (+6.8% giá nhà)." },
+    { term: "PPA / TPO vs Loan", def: "Không sở hữu vs solar-owned (premium giá nhà theo LBNL, tùy market)." },
     { term: "SGIP", def: "Rebate pin lưu trữ tại CA." },
     { term: "Social proof", def: "Reviews quyết định trust trước khi ký." },
     { term: "NEM 3.0", def: "Pin lưu trữ gần như bắt buộc." },
@@ -273,12 +362,14 @@ const journeyStages = [
   },
 ];
 
+/** % = ước lượng phân khúc trên TAM ~4.0M hộ CA chưa lắp solar (xem CaMarketSizingPanel) */
+const TAM_CA_HOUSEHOLDS = 4.0;
 const segments = [
-  { name: "The Bill Shocked", pct: "40-45%", tag: "PRIMARY", tagColor: "#F4A623", profile: "Homeowner 35-55 tuổi, hóa đơn $200-500+/tháng", trigger: "Mở bill mùa hè, shock bởi TOU peak rate", research: "Google 'why is my electric bill so high' → 'solar cost CA'", financing: "$0 down, PPA hoặc loan — muốn savings ngay ngày 1", barrier: "'Có thật không hay sales trick?' → cần social proof", channel: "Google Ads bill keywords, Facebook savings calculator" },
-  { name: "The Resilience Seeker", pct: "20-25%", tag: "GROWING", tagColor: "#2E7D32", profile: "Homeowner 40-65 tuổi, khu vực hay mất điện", trigger: "Trải qua PSPS event hoặc mất điện nhiều ngày", research: "Tìm 'solar battery backup', Tesla Powerwall", financing: "Sẵn sàng trả premium cho battery system", barrier: "Giá battery cao ($10-15K thêm), phức tạp kỹ thuật", channel: "Content marketing backup power, referral sau mất điện" },
-  { name: "The Smart Investor", pct: "15-20%", tag: "ANALYTICAL", tagColor: "#1565C0", profile: "Homeowner 30-50, research-heavy, tính ROI kỹ", trigger: "So sánh ROI solar vs các khoản đầu tư khác", research: "EnergySage 5+ quotes, forum, NPV calculator", financing: "Cash hoặc loan — muốn sở hữu để tăng giá trị nhà (+6.8%)", barrier: "Post-ITC ROI yếu hơn → cần data convincing", channel: "EnergySage marketplace, SEO content với calculator" },
-  { name: "The Green Conscious", pct: "10-15%", tag: "VALUES", tagColor: "#00695C", profile: "Homeowner 25-45 tuổi, có EV, quan tâm môi trường", trigger: "Giá trị cá nhân, cam kết bền vững", research: "Blog xanh, cộng đồng EV, social media", financing: "Linh hoạt — sẵn sàng trả thêm cho 'clean' option", barrier: "Ít nhạy cảm giá nhưng vẫn cần ROI hợp lý", channel: "Instagram/TikTok, partnership EV dealers" },
-  { name: "The New Homebuyer", pct: "5-10%", tag: "EMERGING", tagColor: "#6A1B9A", profile: "Mới mua nhà tại CA, shock giá điện lần đầu", trigger: "Hóa đơn SCE đầu tiên + neighbor/realtor recommend", research: "Hỏi realtor, search online, quyết định nhanh", financing: "Cần education về options, thường chọn PPA", barrier: "Thiếu hiểu biết, sợ commitment dài hạn", channel: "Realtor partnerships, local community groups" },
+  { name: "The Bill Shocked", pct: "40–45%", sizeCA: "~1.6–1.8 triệu hộ", tag: "PRIMARY", tagColor: "#F4A623", profile: "Homeowner 35–55 tuổi, hóa đơn $200–500+/tháng (SCE territory)", trigger: "Mở bill mùa hè, shock TOU on-peak ~58¢/kWh", research: "Google 'why is my electric bill so high' → 'solar cost CA'", financing: "$0 down, PPA hoặc loan — muốn savings ngay", barrier: "Sợ sales trick → cần review & minh bạch giá", channel: "Google Ads, calculator landing, SCE rate content" },
+  { name: "The Resilience Seeker", pct: "20–25%", sizeCA: "~0.8–1.0 triệu hộ", tag: "GROWING", tagColor: "#2E7D32", profile: "40–65 tuổi, PG&E/SCE vùng PSPS/wildfire", trigger: "PSPS hoặc mất điện nhiều ngày", research: "'solar battery backup', SGIP, Tesla Powerwall", financing: "Cash/loan gói pin; SGIP giảm capex", barrier: "Giá pin + hiểu biết kỹ thuật", channel: "Backup content, post-PSPS referral" },
+  { name: "The Smart Investor", pct: "15–20%", sizeCA: "~0.6–0.8 triệu hộ", tag: "ANALYTICAL", tagColor: "#1565C0", profile: "30–50 tuổi, so sánh ROI/NPV kỹ", trigger: "Lock chi phí năng lượng vs giá điện dài hạn", research: "EnergySage 3–5 quotes, SolarReviews, LBNL home-value studies", financing: "Cash/loan solar-owned (literature ~4–7% premium giá nhà, tùy market)", barrier: "Post-ITC cần model tài chính thật", channel: "EnergySage, SEO calculator, transparent proposal" },
+  { name: "The Green Conscious", pct: "10–15%", sizeCA: "~0.4–0.6 triệu hộ", tag: "VALUES", tagColor: "#00695C", profile: "25–45 tuổi, thường có EV", trigger: "Giá trị bền vững + tiết kiệm", research: "Blog xanh, EV groups, social", financing: "Linh hoạt; hay bundle EV charger + solar", barrier: "Vẫn cần ROI hợp lý sau ITC", channel: "Social, EV dealer partnerships" },
+  { name: "The New Homebuyer", pct: "5–10%", sizeCA: "~0.2–0.4 triệu hộ", tag: "EMERGING", tagColor: "#6A1B9A", profile: "Mới mua nhà CA (Title 24 / mandate awareness)", trigger: "Bill SCE đầu tiên + realtor/hàng xóm", research: "Realtor, Google, quyết nhanh nếu trust cao", financing: "PPA/loan cần education", barrier: "Sợ cam kết dài hạn", channel: "Realtor partners, community HOA" },
 ];
 
 const infoSources = [
@@ -335,7 +426,8 @@ export default function App() {
           <h1 style={{ fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.1, margin: "0 0 8px" }}>
             Phân Tích Ngành Solar<br /><span style={{ color: "#F4A623" }}>Residential California 2026</span>
           </h1>
-          <p style={{ fontSize: "14px", color: "rgba(245,240,232,0.45)", margin: 0 }}>Thuật ngữ · PESTEL · Porter · Path to Purchase · Consumer Deep Dive</p>
+          <p style={{ fontSize: "14px", color: "rgba(245,240,232,0.45)", margin: "0 0 10px" }}>Thuật ngữ · PESTEL · Porter · Consumer · Path to Purchase · Chiến lược</p>
+          <p style={{ fontSize: "12px", color: "rgba(244,166,35,0.7)", margin: 0 }}>Kiểm chứng dữ liệu: tháng 6/2026 — SEIA 2025 YiR, SCE, EnergySage, Census, California DGStats</p>
         </div>
       </div>
 
@@ -372,10 +464,11 @@ export default function App() {
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px", marginTop: "24px" }}>
-            {[{ n: "132+", l: "Installations", s: "CA verified" }, { n: "$2.39", l: "$/Watt CA avg", s: "20% dưới national" }, { n: "34.5¢", l: "SCE rate/kWh", s: "+83% trong 10 năm" }, { n: "-19%", l: "Dự báo 2026", s: "Sụt giảm residential" }].map((x, i) => (
+            {[{ n: "132+", l: "Installations", s: "Nội bộ CaliSolar" }, { n: "$2.53", l: "$/W CA (ES)", s: "vs $3.39 Mỹ SEIA" }, { n: "34.5¢", l: "SCE avg/kWh", s: "TOU peak ~58¢" }, { n: "−19%", l: "US res. 2026", s: "SEIA forecast" }].map((x, i) => (
               <div key={i} style={card}><div style={{ fontSize: "28px", fontWeight: 800, color: i === 3 ? "#C62828" : "#F4A623", letterSpacing: "-1px" }}>{x.n}</div><div style={{ fontSize: "13px", fontWeight: 600, color: "#F5F0E8", marginTop: "4px" }}>{x.l}</div><div style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginTop: "2px" }}>{x.s}</div></div>
             ))}
           </div>
+          <SourceRefs ids={["cali-company", "energysage-ca", "seia-smi-2025", "sce-rates"]} />
         </section>
 
         {/* ===== PESTEL ===== */}
@@ -393,8 +486,10 @@ export default function App() {
                 <div key={ii} style={{ padding: "16px", borderRadius: "6px", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.04)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}><Badge type={it.impact}>{it.impact === "critical" ? "Nghiêm trọng" : it.impact === "high" ? "Cao" : it.impact === "opportunity" ? "Cơ hội" : "Insight"}</Badge><span style={{ fontSize: "14px", fontWeight: 700 }}>{it.headline}</span></div>
                   <p style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.7, margin: 0 }}>{it.detail}</p>
+                  {it.sourceIds && <SourceRefs ids={it.sourceIds} />}
                 </div>
               ))}</div>
+              {cat.sourceIds && <SectionSources ids={cat.sourceIds} title={`Nguồn — ${cat.title}`} />}
             </div>
           ))}
         </section>
@@ -413,6 +508,7 @@ export default function App() {
               <ul style={{ margin: 0, paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>{f.points.map((p, pi) => <li key={pi} style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.6 }}>{p}</li>)}</ul>
             </div>
           ))}
+          <SectionSources ids={["seia-smi-2025", "energysage-ca", "energysage-marketplace", "solarreviews"]} />
         </section>
 
         {/* ===== COMPETITORS ===== */}
@@ -433,12 +529,15 @@ export default function App() {
               </div>
             ))}
           </div>
+          <p style={{ fontSize: "11px", color: "rgba(245,240,232,0.35)", marginTop: "8px" }}>Rating/đe dọa: snapshot Q2/2026 — xác minh trên SolarReviews/Google trước khi dùng sales battlecard.</p>
+          <SectionSources ids={["solarreviews", "energysage-marketplace", "seia-smi-2025"]} />
         </section>
 
         {/* ===== CONSUMER DEEP DIVE ===== */}
         <section id="consumer" style={sectionWrap}>
           <h2 style={h2}>Consumer Deep Dive</h2>
           <SectionTermHint terms={sectionHints.consumer} />
+          <CaMarketSizingPanel card={card} h3={h3} body={body} />
 
           {/* INFO SOURCES */}
           <h3 style={{ ...h3, marginTop: "8px" }}>Nguồn thông tin tham khảo (xếp hạng)</h3>
@@ -471,7 +570,7 @@ export default function App() {
               { rank: 5, factor: "Financing flexibility", detail: "PPA vs Loan vs Cash vs Prepaid TPO. Công ty nào offer nhiều options hơn = close rate cao hơn.", pct: 74 },
               { rank: 6, factor: "Timeline lắp đặt", detail: "3-6 tuần vs 3-6 tháng. Fast proposal turnaround = competitive advantage rõ ràng.", pct: 65 },
               { rank: 7, factor: "Battery / storage options", detail: "73% muốn nhưng chỉ 40% mua. NEM 3.0 làm battery gần bắt buộc. SGIP rebate available.", pct: 60 },
-              { rank: 8, factor: "Home value impact", detail: "Solar-owned tăng 6.8% giá nhà. TPO/lease thì KHÔNG tăng. Rất quan trọng cho segment 'Smart Investor'.", pct: 45 },
+              { rank: 8, factor: "Home value impact", detail: "Solar-owned: literature LBNL/ Berkeley Lab thường ghi nhận premium (mức % tùy bang & thời điểm — không dùng một số cố định). TPO/lease thường không chuyển asset. Quan trọng với Smart Investor.", pct: 45 },
             ].map((f, i) => (
               <div key={i} style={{ padding: "12px 0", borderBottom: i < 7 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -493,13 +592,17 @@ export default function App() {
 
           {/* SEGMENTS */}
           <h3 style={h3}>Phân khúc khách hàng California 2026</h3>
+          <p style={{ ...body, marginBottom: "16px" }}>
+            Cột <strong style={{ color: "#F4A623" }}>%</strong> = tỷ trọng persona trên TAM ~{TAM_CA_HOUSEHOLDS} triệu hộ chưa lắp solar.
+            Cột <strong style={{ color: "#F4A623" }}>Quy mô CA</strong> = % × TAM (làm tròn; không cộng chính xác 100% vì overlap hành vi).
+          </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "32px" }}>
             {segments.map((seg, i) => (
               <div key={i} style={card}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
                   <span style={{ padding: "3px 10px", borderRadius: "3px", background: seg.tagColor, fontSize: "10px", fontWeight: 700, letterSpacing: "0.5px" }}>{seg.tag}</span>
                   <span style={{ fontSize: "16px", fontWeight: 700, color: "#F5F0E8" }}>{seg.name}</span>
-                  <span style={{ fontSize: "13px", fontWeight: 600, color: seg.tagColor, marginLeft: "auto" }}>{seg.pct}</span>
+                  <span style={{ fontSize: "12px", fontWeight: 600, color: seg.tagColor, marginLeft: "auto" }}>{seg.pct} · {seg.sizeCA}</span>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
                   {[{ l: "Hồ sơ", v: seg.profile }, { l: "Trigger", v: seg.trigger }, { l: "Hành vi research", v: seg.research }, { l: "Financing preference", v: seg.financing }, { l: "Rào cản chính", v: seg.barrier }, { l: "Kênh hiệu quả", v: seg.channel }].map((f, fi) => (
@@ -548,6 +651,7 @@ export default function App() {
               </div>
             </div>
           </div>
+          <SectionSources ids={["census-ca", "ca-dgstats", "energysage-marketplace", "brightlocal", "berkeley-lbnl", "sgip"]} />
         </section>
 
         {/* ===== PATH TO PURCHASE INFOGRAPHIC ===== */}
@@ -633,6 +737,7 @@ export default function App() {
               <span>🏷 Cold leads: 6-12 tuần total</span>
             </div>
           </div>
+          <SectionSources ids={["energysage-marketplace", "brightlocal", "sce-rates", "cpuc-nbt"]} />
         </section>
 
         {/* ===== STRATEGY ===== */}
@@ -650,9 +755,9 @@ export default function App() {
               {[
                 { title: "Build social proof ngay", desc: "Mục tiêu 50+ Google reviews. Yêu cầu review trong 7 ngày sau PTO. Respond 100% reviews trong 24h. Rating 4.5+ = 3x organic leads." },
                 { title: "Đăng ký EnergySage marketplace", desc: "45% segment 'Compare' dùng EnergySage. Không có mặt = mất khách Smart Investor và Bill Shocked." },
-                { title: "TPO/PPA messaging post-ITC", desc: "TPO vẫn hưởng ITC đến 2027. Messaging: 'Bạn không cần tax credit — chúng tôi sở hữu hệ thống, bạn hưởng tiết kiệm từ ngày 1'." },
-                { title: "Solar + Battery bundling", desc: "NEM 3.0: không pin = export $0.04-0.10/kWh. Có pin = self-use $0.70/kWh peak. Educate gap 73% muốn → 40% mua." },
-                { title: "SCE rate messaging", desc: "'Giá điện tăng 83% trong 10 năm. Lock giá năng lượng hôm nay.' Messaging ROI xoay quanh giá điện, không phải ITC." },
+                { title: "TPO/PPA messaging post-ITC", desc: "TPO vẫn đủ điều kiện ITC thương mại + safe harbor (SEIA: hỗ trợ qualify đến ~giữa 2030). Messaging: sở hữu hệ thống bởi đối tác financing — tiết kiệm từ ngày 1 không cần 25D." },
+                { title: "Solar + Battery bundling", desc: "NEM 3.0: export rẻ theo giờ; self-use giờ peak SCE ~58¢+ (TOU-D). Educate gap quan tâm pin vs thực mua; stack SGIP khi đủ điều kiện." },
+                { title: "SCE rate messaging", desc: "Nhấn TOU on-peak & bình quân ~34.5¢/kWh — không dùng % tăng 2026 sai (SCE 1/2026 −5%, 6/2026 −0.1%). ROI = lock năng lượng vs lịch sử bill tăng dài hạn." },
                 { title: "Referral program", desc: "Referral = highest conversion rate. Tạo incentive program: $250-500/referral cho khách hiện tại. Kết hợp realtor/roofer partnerships." },
               ].map((o, i) => (
                 <div key={i} style={{ padding: "16px", borderRadius: "6px", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.04)" }}>
@@ -663,9 +768,16 @@ export default function App() {
             </div>
           </div>
 
-          <div style={{ marginTop: "32px", padding: "16px 0", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "11px", color: "rgba(245,240,232,0.25)" }}>
-            Nguồn: SEIA/Wood Mackenzie 2025 YiR, McKinsey, EnergySage H2 2025, OhmSnap CA Market Data, SCE Rate Advisory, CPUC, SurgePV, Bodhi Solar, WebFX, Solar.com. Phân tích cho CaliSolar — Tháng 6/2026.
+          <div style={{ ...card, marginTop: "24px", borderLeft: "3px solid rgba(244,166,35,0.5)" }}>
+            <h3 style={{ ...h3, fontSize: "15px" }}>Ghi chú kiểm chứng (audit 06/2026)</h3>
+            <ul style={{ margin: 0, paddingLeft: "18px", ...body, fontSize: "13px" }}>
+              <li><strong>Đã cập nhật:</strong> $/W CA $2.53 (EnergySage); Mỹ $3.39 Q4/2025 (SEIA); SCE avg 34.5¢ & điều chỉnh 2026; ITC 25D hết + forecast −19% 2026.</li>
+              <li><strong>Đã sửa:</strong> Bỏ claim “SCE +12.9% năm 2026” — không khớp Rate Advisory SCE (1/2026 giảm ~5%, 6/2026 giảm ~0.1%).</li>
+              <li><strong>Ước tính / cần theo dõi:</strong> % phân khúc persona, 73/40% pin interest, 3× leads từ 50+ reviews — benchmark ngành; số CaliSolar 132+ installs cần đồng bộ CRM.</li>
+              <li><strong>Đối thủ:</strong> Rating snapshot — verify live trước pitch.</li>
+            </ul>
           </div>
+          <SectionSources ids={reportSources.map((s) => s.id)} title="Danh mục nguồn tham khảo — toàn báo cáo" />
         </section>
 
         {/* ===== GLOSSARY ===== */}

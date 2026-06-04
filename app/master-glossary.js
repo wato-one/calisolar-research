@@ -3,7 +3,7 @@ export const masterGlossary = [
   {
     term: "$/W",
     en: "Dollar per Watt",
-    def: "Chỉ số chuẩn để so sánh giá lắp đặt solar: tổng chi phí hệ thống (thiết bị + lao động + permit) chia cho công suất DC (W). California thường ~$2.39/W — thấp hơn trung bình Mỹ ~$3.00/W vì cạnh tranh installer dày. Khi ITC hết hạn, homeowner nhìn $/W và payback thay vì chỉ % giảm thuế.",
+    def: "Chỉ số chuẩn để so sánh giá lắp đặt solar: tổng chi phí hệ thống (thiết bị + lao động + permit) chia cho công suất DC (W). EnergySage (6/2026): California ~$2.53/W; SEIA Q4/2025: bình quân residential Mỹ ~$3.39/W. Khi ITC 25D hết, homeowner nhìn $/W và payback thay vì chỉ % giảm thuế.",
   },
   {
     term: "APR",
@@ -83,7 +83,7 @@ export const masterGlossary = [
   {
     term: "Financing",
     en: "Tài trợ",
-    def: "Các hình thức trả cho hệ solar: cash, loan (solar-owned), lease, PPA, TPO. Chi phí vốn (APR) và ITC eligibility quyết định sản phẩm bán được. Post-ITC residential, TPO/PPA thương mại ITC đến 2027 vẫn là vũ khí đối thủ national.",
+    def: "Các hình thức trả cho hệ solar: cash, loan (solar-owned), lease, PPA, TPO. Chi phí vốn (APR) và ITC eligibility quyết định sản phẩm bán được. Post-ITC residential, TPO/PPA thương mại + safe harbor (SEIA: hỗ trợ qualify ITC TPO đến ~giữa 2030) vẫn là vũ khí đối thủ national.",
   },
   {
     term: "Fixed Charge",
@@ -128,7 +128,7 @@ export const masterGlossary = [
   {
     term: "Loan / Cash",
     en: "Vay / Trả tiền mặt",
-    def: "Homeowner sở hữu hệ (solar-owned) — tăng giá trị nhà (~6.8% theo nghiên cứu thường trích), transferable warranty quan trọng. Cash có ROI nhanh nhất; loan phổ biến nhất nhưng nhạy APR và thời gian sống loan vs payback.",
+    def: "Homeowner sở hữu hệ (solar-owned) — có thể tăng giá trị chuyển nhượng (LBNL solar adopters / home-value studies; mức % tùy thị trường). Transferable warranty quan trọng. Cash có ROI nhanh nhất; loan phổ biến nhưng nhạy APR.",
   },
   {
     term: "MW",
@@ -153,7 +153,7 @@ export const masterGlossary = [
   {
     term: "NPV",
     en: "Net Present Value",
-    def: "Giá trị hiện tại thuần của dòng tiền tiết kiệm điện trừ chi phí hệ — discount theo lãi suất. Công cụ so sánh cash vs loan vs PPA; post-ITC NPV giảm nên cần input giá điện tăng 83%/10 năm và Fixed Charge thực tế.",
+    def: "Giá trị hiện tại thuần của dòng tiền tiết kiệm điện trừ chi phí hệ — discount theo lãi suất. Công cụ so sánh cash vs loan vs PPA; post-ITC NPV giảm nên cần input SCE TOU theo giờ, fixed charge CPUC và không giả định export 1:1 như NEM 2.0.",
   },
   {
     term: "O&M",
@@ -258,7 +258,7 @@ export const masterGlossary = [
   {
     term: "Solar-owned",
     en: "Homeowner owns system",
-    def: "Khách sở hữu panel/inverter (cash hoặc loan đã trả). Tăng giá trị chuyển nhượng (~6.8%), cần transferable warranty và clear lien release. Đối lập TPO/lease trên mái.",
+    def: "Khách sở hữu panel/inverter (cash hoặc loan đã trả). Có thể tăng giá trị chuyển nhượng (xem LBNL); cần transferable warranty và clear lien release. Đối lập TPO/lease trên mái.",
   },
   {
     term: "SolarReviews",
@@ -273,7 +273,7 @@ export const masterGlossary = [
   {
     term: "Tailwinds",
     en: "Gió thuận",
-    def: "Yếu tố đẩy demand: giá điện +83%/10 năm, PSPS, Solar Mandate, battery + VPP, climate 2045. CaliSolar align messaging với tailwinds khi headwinds (ITC, NEM) làm ROI khó hơn.",
+    def: "Yếu tố đẩy demand: TOU peak cao, PSPS, Solar Mandate, battery + VPP, climate 2045. CaliSolar align messaging với tailwinds khi headwinds (ITC, NEM) làm ROI khó hơn.",
   },
   {
     term: "TOU",
@@ -288,7 +288,7 @@ export const masterGlossary = [
   {
     term: "TPO",
     en: "Third-Party Ownership",
-    def: "Mô hình công ty thứ ba sở hữu hệ và hưởng commercial ITC (đến ~2027 theo báo cáo), khách trả lease/PPA. National players mạnh TPO; local dealer cần partnership financing hoặc nhấn solar-owned + SGIP.",
+    def: "Mô hình công ty thứ ba sở hữu hệ và hưởng commercial ITC + safe harbor (SEIA: timeline qualify đến ~giữa 2030), khách trả lease/PPA. National players mạnh TPO; local dealer cần partnership financing hoặc nhấn solar-owned + SGIP.",
   },
   {
     term: "Transferable warranty",
@@ -318,7 +318,7 @@ export const masterGlossary = [
   {
     term: "YoY",
     en: "Year over Year",
-    def: "So sánh cùng kỳ năm trước — ví dụ pin residential +51% YoY 2025. Dùng trong macro narrative (growth storage) không nhầm với MoM seasonal bill shock mùa hè.",
+    def: "So sánh cùng kỳ năm trước — ví dụ residential Mỹ −2% MW 2025 vs 2024 (SEIA). Dùng trong macro narrative; không nhầm với seasonal bill shock mùa hè SCE.",
   },
   {
     term: "Yelp / BBB",
