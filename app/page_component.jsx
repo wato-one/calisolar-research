@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { masterGlossary } from "./master-glossary";
 
 const sections = [
   { id: "overview", label: "Tổng Quan" },
@@ -131,85 +132,18 @@ function TermGlossary({ title = "Bảng thuật ngữ — toàn báo cáo", term
       marginBottom: "24px",
     }}>
       <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#F4A623", marginBottom: "14px" }}>{title}</div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "12px 20px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px 32px" }}>
         {terms.map((t, i) => (
-          <div key={i}>
-            <span style={{ fontSize: "13px", fontWeight: 700, color: "#F4A623" }}>{t.term}</span>
-            {t.en && <span style={{ fontSize: "10px", color: "rgba(245,240,232,0.35)", marginLeft: "5px" }}>{t.en}</span>}
-            <p style={{ fontSize: "12px", color: "rgba(245,240,232,0.6)", lineHeight: 1.55, margin: "3px 0 0" }}>{t.def}</p>
+          <div key={i} style={{ paddingBottom: "4px" }}>
+            <span style={{ fontSize: "14px", fontWeight: 700, color: "#F4A623" }}>{t.term}</span>
+            {t.en && <span style={{ fontSize: "11px", color: "rgba(245,240,232,0.4)", marginLeft: "6px" }}>{t.en}</span>}
+            <p style={{ fontSize: "13px", color: "rgba(245,240,232,0.72)", lineHeight: 1.75, margin: "8px 0 0" }}>{t.def}</p>
           </div>
         ))}
       </div>
     </div>
   );
 }
-
-const masterGlossary = [
-  { term: "$/W", en: "Dollar per Watt", def: "Giá lắp đặt chia công suất (W). CA ~$2.39/W." },
-  { term: "APR", en: "Annual Percentage Rate", def: "Lãi suất vay solar (~5.5%)." },
-  { term: "Authorized dealer", en: "Đại lý ủy quyền", def: "Bán & tư vấn, thường không tự lắp (mô hình CaliSolar)." },
-  { term: "Bill Shock", en: "Sốc hóa đơn", def: "Trigger chính: hóa đơn điện SCE $300–500+ mùa hè." },
-  { term: "Bundling", en: "Gói sản phẩm", def: "Bán solar kèm pin — quan trọng sau NEM 3.0." },
-  { term: "C-10 / C-46", en: "CSLB licenses", def: "Giấy phép thầu điện / solar tại CA." },
-  { term: "Close rate", en: "Tỷ lệ chốt", def: "% lead ký hợp đồng." },
-  { term: "Community solar", en: "Solar cộng đồng", def: "Thuê quota từ farm solar — thay thế yếu cho mái nhà riêng." },
-  { term: "Consolidation", en: "Tập trung ngành", def: "Công ty nhỏ rời thị trường hoặc M&A." },
-  { term: "CPUC", en: "CA Utilities Commission", def: "Điều tiết utility, NEM, biểu giá CA." },
-  { term: "CRM", en: "Customer Relationship Mgmt", def: "Hệ thống quản lý lead/khách hàng." },
-  { term: "CSLB", en: "Contractors License Board", def: "Cơ quan cấp phép thầu tại CA." },
-  { term: "Dealer", en: "Đại lý", def: "Bán solar, thường thuê EPC lắp đặt." },
-  { term: "EPC", en: "Eng. Procurement Construction", def: "Thiết kế, mua thiết bị, thi công." },
-  { term: "EnergySage", en: "Marketplace", def: "Nền tảng so sánh báo giá solar online." },
-  { term: "EV", en: "Electric Vehicle", def: "Xe điện — segment khách quan tâm năng lượng xanh." },
-  { term: "Financing", en: "Tài trợ", def: "PPA, loan, cash, TPO — hạ chi phí ban đầu." },
-  { term: "Fixed Charge", en: "Phí cố định", def: "Phí hàng tháng trên hóa đơn điện (CPUC)." },
-  { term: "GWdc", en: "Gigawatt DC", def: "Đơn vị công suất lắp đặt solar." },
-  { term: "Headwinds", en: "Gió ngược", def: "Yếu tố kìm tăng trưởng ngành." },
-  { term: "Homeowner", en: "Chủ nhà", def: "Khách hàng cuối mua solar residential." },
-  { term: "Installer", en: "Nhà lắp đặt", def: "Thi công trực tiếp, cần license C-10." },
-  { term: "ITC", en: "Investment Tax Credit", def: "Tín dụng thuế liên bang; residential 30% hết 12/2025." },
-  { term: "kWh", en: "Kilowatt-hour", def: "Đơn vị điện năng trên hóa đơn." },
-  { term: "Lease / TPO", en: "Thuê / Sở hữu bên thứ ba", def: "Công ty sở hữu hệ thống; khách không sở hữu panel." },
-  { term: "Loan / Cash", en: "Vay / Trả cash", def: "Homeowner sở hữu hệ thống (solar-owned)." },
-  { term: "MW", en: "Megawatt", def: "1 triệu watt — quy mô công suất." },
-  { term: "NABCEP", en: "Certification", def: "Chứng chỉ lắp đặt solar uy tín Bắc Mỹ." },
-  { term: "NEM 2.0", en: "Net Energy Metering", def: "Chính sách cũ: offset điện dư ~1:1 (đã thay)." },
-  { term: "NEM 3.0", en: "Net Billing Tariff", def: "Export điện dư ~$0.04–0.10/kWh từ 4/2023." },
-  { term: "NPV", en: "Net Present Value", def: "Giá trị hiện tại thuần — tính ROI dài hạn." },
-  { term: "O&M", en: "Operations & Maintenance", def: "Vận hành & bảo trì sau lắp." },
-  { term: "Organic leads", en: "Lead tự nhiên", def: "Khách đến từ SEO/review, không trả ads." },
-  { term: "Overpromise", en: "Hứa quá mức", def: "Phóng đại tiết kiệm/ITC — gây distrust." },
-  { term: "Path to Purchase", en: "Hành trình mua", def: "7 giai đoạn từ trigger đến advocate." },
-  { term: "PERC", en: "Solar cell tech", def: "Công nghệ cell thế hệ trước, đang bị TOPCon thay." },
-  { term: "PESTEL", en: "P·E·S·T·E·L", def: "Khung phân tích môi trường vĩ mô 6 chiều." },
-  { term: "PG&E / SCE / SDG&E", en: "Utilities CA", def: "Ba công ty điện lớn tại California." },
-  { term: "Porter's Five Forces", en: "5 lực Porter", def: "Khung phân tích áp lực cạnh tranh ngành." },
-  { term: "Post-ITC", en: "Sau ITC", def: "Giai đoạn sau khi residential ITC hết hạn." },
-  { term: "PPA", en: "Power Purchase Agreement", def: "Mua điện từ hệ thống do bên thứ ba sở hữu." },
-  { term: "PSPS", en: "Power Shutoff", def: "Cắt điện phòng cháy rừng tại CA." },
-  { term: "PTO", en: "Permission to Operate", def: "Giấy phép utility cho phép bật hệ thống." },
-  { term: "Residential Solar", en: "Solar dân dụng", def: "Hệ solar lắp mái nhà ở." },
-  { term: "ROI", en: "Return on Investment", def: "Lợi tức / thời gian hoàn vốn đầu tư." },
-  { term: "Section 25D", en: "Residential ITC", def: "Điều khoản ITC cho homeowner — đã hết 12/2025." },
-  { term: "SEIA", en: "Solar Industries Assoc.", def: "Hiệp hội solar Mỹ, xuất báo cáo thị trường." },
-  { term: "SGIP", en: "Battery rebate program", def: "Chương trình rebate pin lưu trữ của CA." },
-  { term: "SEO", en: "Search optimization", def: "Tối ưu hiển thị trên Google Search." },
-  { term: "Social proof", en: "Bằng chứng xã hội", def: "Reviews, rating, số install — tăng trust." },
-  { term: "Solar Mandate", en: "Bắt buộc solar", def: "Nhà mới CA phải có solar từ 2020." },
-  { term: "Solar-owned", en: "Sở hữu hệ thống", def: "Homeowner sở hữu — tăng ~6.8% giá nhà." },
-  { term: "SolarReviews", en: "Review platform", def: "Trang đánh giá installer chuyên solar." },
-  { term: "Switching cost", en: "Chi phí chuyển đổi", def: "Rào cản đổi nhà cung cấp (≈0 trước ký HĐ)." },
-  { term: "Tailwinds", en: "Gió thuận", def: "Yếu tố đẩy tăng trưởng ngành." },
-  { term: "TOU", en: "Time-of-Use", def: "Biểu giá theo giờ; peak thường 4–9 PM." },
-  { term: "TOPCon / HJT", en: "Cell technology", def: "Pin thế hệ mới, hiệu suất cao hơn PERC." },
-  { term: "TPO", en: "Third-Party Ownership", def: "Bên thứ ba sở hữu hệ thống, hưởng ITC thương mại." },
-  { term: "Transferable warranty", en: "Bảo hành chuyển nhượng", def: "Bảo hành chuyển sang chủ nhà mới khi bán." },
-  { term: "VPP", en: "Virtual Power Plant", def: "Mạng pin nhà phối hợp bán điện giờ cao điểm." },
-  { term: "WOM", en: "Word of Mouth", def: "Truyền miệng / giới thiệu từ người quen." },
-  { term: "Workmanship warranty", en: "Bảo hành thi công", def: "Bảo hành chất lượng lắp đặt (~10 năm)." },
-  { term: "YoY", en: "Year over Year", def: "So sánh cùng kỳ năm trước." },
-  { term: "Yelp / BBB", en: "Review platforms", def: "Nền tảng đánh giá uy tín doanh nghiệp." },
-];
 
 const sectionHints = {
   overview: [
@@ -759,7 +693,7 @@ export default function App() {
         {/* ===== GLOSSARY ===== */}
         <section id="glossary" style={{ ...sectionWrap, marginBottom: "32px" }}>
           <h2 style={h2}>Bảng Thuật Ngữ</h2>
-          <p style={{ ...body, marginBottom: "20px" }}>Định nghĩa ngắn gọn các viết tắt và thuật ngữ dùng xuyên suốt báo cáo. Mỗi phần phía trên có tóm tắt thuật ngữ chính — bấm &quot;Bảng thuật ngữ đầy đủ&quot; để cuộn xuống đây.</p>
+          <p style={{ ...body, marginBottom: "20px" }}>Giải thích chi tiết từng viết tắt và khái niệm trong báo cáo (ngữ cảnh California, CaliSolar và chiến lược sau ITC). Các phần phía trên chỉ tóm tắt 3–5 dòng — dùng nút &quot;Bảng thuật ngữ đầy đủ&quot; ở đầu mỗi section để quay lại đây.</p>
           <TermGlossary terms={masterGlossary} />
         </section>
 
