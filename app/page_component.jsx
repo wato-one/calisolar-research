@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 
 const sections = [
   { id: "overview", label: "Tổng Quan" },
-  { id: "glossary", label: "Thuật Ngữ" },
   { id: "pestel", label: "PESTEL" },
   { id: "porter", label: "Porter's 5 Forces" },
   { id: "lifecycle", label: "Giai Đoạn Ngành" },
@@ -11,6 +10,7 @@ const sections = [
   { id: "journey", label: "Path to Purchase" },
   { id: "consumer", label: "Consumer Deep Dive" },
   { id: "strategy", label: "Chiến Lược" },
+  { id: "glossary", label: "Thuật Ngữ" },
 ];
 
 const pestelData = [
@@ -451,13 +451,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* ===== GLOSSARY ===== */}
-        <section id="glossary" style={sectionWrap}>
-          <h2 style={h2}>Bảng Thuật Ngữ</h2>
-          <p style={{ ...body, marginBottom: "20px" }}>Định nghĩa ngắn gọn các viết tắt và thuật ngữ dùng xuyên suốt báo cáo. Mỗi phần phía dưới có tóm tắt thuật ngữ chính — bấm &quot;Bảng thuật ngữ đầy đủ&quot; để quay lại đây.</p>
-          <TermGlossary terms={masterGlossary} />
-        </section>
-
         {/* ===== PESTEL ===== */}
         <section id="pestel" style={sectionWrap}>
           <h2 style={h2}>Phân Tích PESTEL</h2>
@@ -761,6 +754,13 @@ export default function App() {
           <div style={{ marginTop: "32px", padding: "16px 0", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "11px", color: "rgba(245,240,232,0.25)" }}>
             Nguồn: SEIA/Wood Mackenzie 2025 YiR, McKinsey, EnergySage H2 2025, OhmSnap CA Market Data, SCE Rate Advisory, CPUC, SurgePV, Bodhi Solar, WebFX, Solar.com. Phân tích cho CaliSolar — Tháng 6/2026.
           </div>
+        </section>
+
+        {/* ===== GLOSSARY ===== */}
+        <section id="glossary" style={{ ...sectionWrap, marginBottom: "32px" }}>
+          <h2 style={h2}>Bảng Thuật Ngữ</h2>
+          <p style={{ ...body, marginBottom: "20px" }}>Định nghĩa ngắn gọn các viết tắt và thuật ngữ dùng xuyên suốt báo cáo. Mỗi phần phía trên có tóm tắt thuật ngữ chính — bấm &quot;Bảng thuật ngữ đầy đủ&quot; để cuộn xuống đây.</p>
+          <TermGlossary terms={masterGlossary} />
         </section>
 
       </div>
