@@ -6,7 +6,6 @@ const sections = [
   { id: "overview", label: "Tổng Quan" },
   { id: "pestel", label: "PESTEL" },
   { id: "porter", label: "Porter's 5 Forces" },
-  { id: "lifecycle", label: "Giai Đoạn Ngành" },
   { id: "competitors", label: "Đối Thủ" },
   { id: "journey", label: "Path to Purchase" },
   { id: "consumer", label: "Consumer Deep Dive" },
@@ -164,12 +163,6 @@ const sectionHints = {
     { term: "Consolidation", def: "Tập trung thị trường sau ITC hết hạn." },
     { term: "EnergySage", def: "Marketplace so giá — tăng quyền lực khách hàng." },
     { term: "Switching cost", def: "≈ 0 trước khi ký hợp đồng." },
-  ],
-  lifecycle: [
-    { term: "Headwinds / Tailwinds", def: "Yếu tố kìm vs đẩy tăng trưởng ngành." },
-    { term: "ITC", def: "Headwind cho mua outright; tailwind cho TPO/PPA." },
-    { term: "NEM 3.0", def: "Headwind — giảm giá trị export điện dư." },
-    { term: "GWdc", def: "Dự báo +60 GWdc solar Mỹ 2026–2036." },
   ],
   competitors: [
     { term: "TPO / PPA", def: "Sunrun dẫn đầu mô hình không sở hữu hệ thống." },
@@ -420,21 +413,6 @@ export default function App() {
               <ul style={{ margin: 0, paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>{f.points.map((p, pi) => <li key={pi} style={{ fontSize: "13px", color: "rgba(245,240,232,0.6)", lineHeight: 1.6 }}>{p}</li>)}</ul>
             </div>
           ))}
-        </section>
-
-        {/* ===== LIFECYCLE ===== */}
-        <section id="lifecycle" style={sectionWrap}>
-          <h2 style={h2}>Giai Đoạn Vòng Đời Ngành</h2>
-          <SectionTermHint terms={sectionHints.lifecycle} />
-          <div style={{ ...card, borderLeft: "3px solid #F4A623" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#F4A623", marginBottom: "8px" }}>Kết luận</div>
-            <h3 style={{ ...h3, fontSize: "20px" }}>Mature Growth → Turbulent Consolidation</h3>
-            <p style={body}>2026 sụt giảm 19%. Phục hồi 7%/năm từ 2027-2030. Dài hạn: thêm 60+ GWdc tại Mỹ từ 2026-2036. Ai sống sót qua 2026 sẽ hưởng lợi lớn.</p>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-            <div style={card}><h3 style={{ ...h3, color: "#C62828" }}>Headwinds</h3><ul style={{ margin: 0, paddingLeft: "16px", ...body }}><li>ITC hết hạn → ROI yếu hơn</li><li>Thuế quan tăng giá thiết bị</li><li>NEM 3.0 giảm giá trị export</li><li>Fixed charge CPUC mới</li><li>Residential giảm 19% năm 2026</li></ul></div>
-            <div style={card}><h3 style={{ ...h3, color: "#2E7D32" }}>Tailwinds</h3><ul style={{ margin: 0, paddingLeft: "16px", ...body }}><li>Giá điện +83%/10 năm, +12.9% năm 2026</li><li>TPO/PPA vẫn được hưởng ITC</li><li>Battery storage +51% YoY</li><li>Consolidation → ít đối thủ hơn</li><li>Phục hồi 7%/năm từ 2027</li></ul></div>
-          </div>
         </section>
 
         {/* ===== COMPETITORS ===== */}
